@@ -1,0 +1,4 @@
+[package]
+name = "aoc2018"
+version = "0.0.0"
+authors = ["Anthony Sottile <asottile@umich.edu>"]
