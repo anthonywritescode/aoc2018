@@ -27,6 +27,24 @@
 
 ***
 
+### `.pre-commit-config.yaml`
+
+```yaml
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.0.0
+    hooks:
+    # ...
+    -   id: flake8
+# ...
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.641
+    hooks:
+    -   id: mypy
+```
+
+***
+
 ### `requirements.txt`
 
 ```
@@ -50,24 +68,6 @@ pre-commit installed at .../.git/hooks/pre-commit
 
 ***
 
-### `.pre-commit-config.yaml`
-
-```yaml
-repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.0.0
-    hooks:
-    # ...
-    -   id: flake8
-# ...
--   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.641
-    hooks:
-    -   id: mypy
-```
-
-***
-
 ### `day*/part*.py`
 
 ```python
@@ -78,6 +78,8 @@ def main() -> int:
 
     with open(args.data_file) as f:
         print(compute(f.read()))
+
+    return 0
 
 if __name__ == '__main__':
     exit(main())
