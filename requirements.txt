@@ -1,0 +1,4 @@
+markdown-to-presentation==0.0.25
+pygments-pytest
+pre-commit
+pytest

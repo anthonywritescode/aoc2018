@@ -1,4 +1,9 @@
 *.pyc
+*/.mtp
+*/assets
+*/build
+*/index.htm
 */target
 /.mypy_cache
+/index.htm
 /venv

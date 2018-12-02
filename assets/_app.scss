@@ -1,0 +1,22 @@
+.reveal h2 {
+    color: #0c0;
+    text-shadow: 0 0 2px #0c0, 0 0 5px #0c0;
+}
+a:hover {
+    text-decoration: underline !important;
+}
+
+// pygments-pytest
+.highlight.pytest, .highlight.console {
+    pre { background-color: #2d0922; color: #fff; }
+
+    .-Color-Bold { font-weight: bold; }
+    .-Color-BoldCyan{ color: #06989a; font-weight: bold; }
+    .-Color-Cyan{ color: #06989a; }
+    .-Color-BoldGreen{ color: #4e9a06; font-weight: bold; }
+    .-Color-Green{ color: #4e9a06; }
+    .-Color-BoldRed{ color: #c00; font-weight: bold; }
+    .-Color-Red{ color: #c00; }
+    .-Color-BoldYellow{ color: #c4a000; font-weight: bold; }
+    .-Color-Yellow{ color: #c4a000; }
+}
