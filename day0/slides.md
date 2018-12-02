@@ -30,6 +30,7 @@
 ### `.pre-commit-config.yaml`
 
 ```yaml
+repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.0.0
     hooks:
