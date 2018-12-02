@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="build/presentation.css">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides"><section><h2>advent of code 2018</h2>
+<h3>intro + project template</h3>
+</section><section><h3>what is advent of code</h3>
+<ul>
+<li>"advent calendar" of programming challenges</li>
+<li>practice problem solving</li>
+<li>prepare for interviews</li>
+<li>etc.</li>
+</ul>
+</section><section><h3>advent 2018</h3>
+<ul>
+<li>my primary solutions will be in python</li>
+<li>other solutions in other languages (time permitting!)</li>
+</ul>
+</section><section><h3>project template</h3>
+<ul>
+<li><a href="https://pre-commit.com">pre-commit</a></li>
+<li><a href="http://mypy-lang.org">mypy</a></li>
+<li><a href="https://pytest.org">pytest</a></li>
+</ul>
+</section><section><h3><code>.pre-commit-config.yaml</code></h3>
+<div class="highlight yaml"><pre><span></span><span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">repo</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/pre-commit-hooks</span>
+    <span class="l l-Scalar l-Scalar-Plain">rev</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">v2.0.0</span>
+    <span class="l l-Scalar l-Scalar-Plain">hooks</span><span class="p p-Indicator">:</span>
+    <span class="c1"># ...</span>
+    <span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">flake8</span>
+<span class="c1"># ...</span>
+<span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">repo</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/mirrors-mypy</span>
+    <span class="l l-Scalar l-Scalar-Plain">rev</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">v0.641</span>
+    <span class="l l-Scalar l-Scalar-Plain">hooks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">mypy</span>
+</pre></div>
+</section><section><h3><code>requirements.txt</code></h3>
+<div class="highlight"><pre><span></span># ...
+pre-commit
+pytest
+</pre></div>
+</section><section><h3><code>day*/part*.py</code></h3>
+<div class="highlight python"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;data_file&#39;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">data_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">compute</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()))</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="nb">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</section><section><h3><code>day*/part*.py</code></h3>
+<div class="highlight python"><pre><span></span><span class="nd">@pytest.mark.parametrize</span><span class="p">(</span>
+    <span class="p">(</span><span class="s1">&#39;input_s&#39;</span><span class="p">,</span> <span class="s1">&#39;expected&#39;</span><span class="p">),</span>
+    <span class="p">(</span>
+        <span class="c1"># put given test cases here</span>
+        <span class="p">(</span><span class="s1">&#39;+1</span><span class="se">\n</span><span class="s1">-2</span><span class="se">\n</span><span class="s1">+3</span><span class="se">\n</span><span class="s1">+1&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;+1</span><span class="se">\n</span><span class="s1">+1</span><span class="se">\n</span><span class="s1">+1&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;+1</span><span class="se">\n</span><span class="s1">+1</span><span class="se">\n</span><span class="s1">-2&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;-1</span><span class="se">\n</span><span class="s1">-2</span><span class="se">\n</span><span class="s1">-3&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">),</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">input_s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expected</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span>
+    <span class="k">assert</span> <span class="n">compute</span><span class="p">(</span><span class="n">input_s</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+</pre></div>
+</section><section><h3><code>day*/part*.py</code></h3>
+<div class="highlight python"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="c1"># TODO: implement solution here!</span>
+    <span class="k">return</span> <span class="mi">0</span>
+</pre></div>
+</section><section><h3>testing</h3>
+<div class="highlight pytest"><pre><span></span>$ pytest -q --tb=short day1/part1.py
+<span class=" -Color -Color-Red">FF</span><span class=" -Color -Color-Green">.</span><span class=" -Color -Color-Red">F</span>                                                                 <span class=" -Color -Color-Cyan">[100%]</span>
+================================= FAILURES =================================
+<span class=" -Color -Color-BoldRed">__________________________ test[+1\n-2\n+3\n+1-3] __________________________</span>
+<span class=" -Color -Color-BoldRed">day1/part3.py</span>:28: in test
+<span class=" -Color -Color-Bold">    assert compute(input_s) == expected</span>
+<span class=" -Color -Color-BoldRed">E   AssertionError: assert 0 == 3</span>
+<span class=" -Color -Color-BoldRed">E    +  where 0 = compute(&#39;+1\n-2\n+3\n+1&#39;)</span>
+<span class=" -Color -Color-BoldRed">____________________________ test[+1\n+1\n+1-3] ____________________________</span>
+<span class=" -Color -Color-BoldRed">day1/part3.py</span>:28: in test
+<span class=" -Color -Color-Bold">    assert compute(input_s) == expected</span>
+<span class=" -Color -Color-BoldRed">E   AssertionError: assert 0 == 3</span>
+<span class=" -Color -Color-BoldRed">E    +  where 0 = compute(&#39;+1\n+1\n+1&#39;)</span>
+<span class=" -Color -Color-BoldRed">___________________________ test[-1\n-2\n-3--6] ____________________________</span>
+<span class=" -Color -Color-BoldRed">day1/part3.py</span>:28: in test
+<span class=" -Color -Color-Bold">    assert compute(input_s) == expected</span>
+<span class=" -Color -Color-BoldRed">E   AssertionError: assert 0 == -6</span>
+<span class=" -Color -Color-BoldRed">E    +  where 0 = compute(&#39;-1\n-2\n-3&#39;)</span>
+<span class=" -Color -Color-BoldRed">3 failed, 1 passed in 0.04 seconds</span>
+</pre></div>
+</section><section><h3>challenge answer</h3>
+<p>Place the input at <code>day*/input.txt</code>.</p>
+<div class="highlight console"><pre><span></span><span class="gp">$</span> python day1/part1.py day1/input.txt
+<span class="go">587</span>
+</pre></div>
+<p>Repeat for part2!</p>
+</section><section><h3>advent 2018</h3>
+<ul>
+<li>I'll be live streaming my solutions on twitch:
+<a href="https://twitch.tv/anthonywritescode">anthonywritescode</a></li>
+<li>commiting them to github:
+<a href="https://github.com/anthonywritescode/aoc2018">anthonywritescode/aoc2018</a></li>
+<li>and of course uploading to youtube!</li>
+</ul>
+</section></div>
+        </div>
+        <script src="build/presentation.js"></script>
+        <script>
+            Reveal.initialize({
+                transition: 'linear',
+                keyboard: {39: 'next', 37: 'prev'}
+            });
+        </script>
+    </body>
+</html>
