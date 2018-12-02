@@ -1,4 +1,5 @@
 import argparse
+import difflib
 from typing import Set
 
 import pytest
@@ -15,6 +16,23 @@ def compute_orig(s: str) -> str:  # O(N^2 * M)
                     ret += c1
             if len(ret) == len(line) - 1:
                 return ret
+    raise AssertionError('unreachable!')
+
+
+def compute_difflib(s: str) -> str:
+    """does not work for len(line) < 3"""
+    lines = s.splitlines(True)
+    for line in lines:
+        for other_line in lines:
+            if line == other_line:
+                continue
+            diffs = tuple(difflib.ndiff((line,), (other_line,)))
+            if len(diffs) != 4:
+                continue
+            context_line = diffs[-1]
+            if context_line.count('^') == 1:
+                i = context_line.index('^')
+                return diffs[0][:i].lstrip('- ') + diffs[0][i + 1:].strip()
     raise AssertionError('unreachable!')
 
 
