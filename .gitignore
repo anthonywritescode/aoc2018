@@ -3,6 +3,9 @@
 */assets
 */build
 */index.htm
+*/nimcache
+*/part1
+*/part2
 */target
 /.mypy_cache
 /index.htm
