@@ -26,6 +26,22 @@
 <li><a href="http://mypy-lang.org">mypy</a></li>
 <li><a href="https://pytest.org">pytest</a></li>
 </ul>
+</section><section><h3><code>requirements.txt</code></h3>
+<div class="highlight"><pre><span></span># ...
+pre-commit
+pytest
+</pre></div>
+<div class="highlight console"><pre><span></span><span class="gp">$</span> virtualenv venv -ppython3
+<span class="go">...</span>
+
+<span class="gp">$</span> . venv/bin/activate
+
+<span class="gp">(venv) $</span> pip install -r requirements.txt
+<span class="go">...</span>
+
+<span class="gp">(venv) $</span> pre-commit install
+<span class="go">pre-commit installed at .../.git/hooks/pre-commit</span>
+</pre></div>
 </section><section><h3><code>.pre-commit-config.yaml</code></h3>
 <div class="highlight yaml"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">repos</span><span class="p p-Indicator">:</span>
 <span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">repo</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/pre-commit-hooks</span>
@@ -38,11 +54,6 @@
     <span class="l l-Scalar l-Scalar-Plain">rev</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">v0.641</span>
     <span class="l l-Scalar l-Scalar-Plain">hooks</span><span class="p p-Indicator">:</span>
     <span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">mypy</span>
-</pre></div>
-</section><section><h3><code>requirements.txt</code></h3>
-<div class="highlight"><pre><span></span># ...
-pre-commit
-pytest
 </pre></div>
 </section><section><h3><code>day*/part*.py</code></h3>
 <div class="highlight python"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
