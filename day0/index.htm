@@ -26,6 +26,19 @@
 <li><a href="http://mypy-lang.org">mypy</a></li>
 <li><a href="https://pytest.org">pytest</a></li>
 </ul>
+</section><section><h3><code>.pre-commit-config.yaml</code></h3>
+<div class="highlight yaml"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">repos</span><span class="p p-Indicator">:</span>
+<span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">repo</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/pre-commit-hooks</span>
+    <span class="l l-Scalar l-Scalar-Plain">rev</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">v2.0.0</span>
+    <span class="l l-Scalar l-Scalar-Plain">hooks</span><span class="p p-Indicator">:</span>
+    <span class="c1"># ...</span>
+    <span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">flake8</span>
+<span class="c1"># ...</span>
+<span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">repo</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/mirrors-mypy</span>
+    <span class="l l-Scalar l-Scalar-Plain">rev</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">v0.641</span>
+    <span class="l l-Scalar l-Scalar-Plain">hooks</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">mypy</span>
+</pre></div>
 </section><section><h3><code>requirements.txt</code></h3>
 <div class="highlight"><pre><span></span># ...
 pre-commit
@@ -42,19 +55,6 @@ pytest
 <span class="gp">(venv) $</span> pre-commit install
 <span class="go">pre-commit installed at .../.git/hooks/pre-commit</span>
 </pre></div>
-</section><section><h3><code>.pre-commit-config.yaml</code></h3>
-<div class="highlight yaml"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">repos</span><span class="p p-Indicator">:</span>
-<span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">repo</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/pre-commit-hooks</span>
-    <span class="l l-Scalar l-Scalar-Plain">rev</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">v2.0.0</span>
-    <span class="l l-Scalar l-Scalar-Plain">hooks</span><span class="p p-Indicator">:</span>
-    <span class="c1"># ...</span>
-    <span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">flake8</span>
-<span class="c1"># ...</span>
-<span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">repo</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/mirrors-mypy</span>
-    <span class="l l-Scalar l-Scalar-Plain">rev</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">v0.641</span>
-    <span class="l l-Scalar l-Scalar-Plain">hooks</span><span class="p p-Indicator">:</span>
-    <span class="p p-Indicator">-</span>   <span class="l l-Scalar l-Scalar-Plain">id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">mypy</span>
-</pre></div>
 </section><section><h3><code>day*/part*.py</code></h3>
 <div class="highlight python"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
@@ -63,6 +63,8 @@ pytest
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">data_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="n">compute</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()))</span>
+
+    <span class="k">return</span> <span class="mi">0</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="nb">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
