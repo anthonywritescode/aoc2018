@@ -100,7 +100,7 @@ if __name__ == '__main__':
         ('-1\n-2\n-3', -6),
     ),
 )
-def test(input_s: str, expected: int) -> None
+def test(input_s: str, expected: int) -> None:
     assert compute(input_s) == expected
 ```
 
