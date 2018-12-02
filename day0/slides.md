@@ -27,6 +27,29 @@
 
 ***
 
+### `requirements.txt`
+
+```
+# ...
+pre-commit
+pytest
+```
+
+```console
+$ virtualenv venv -ppython3
+...
+
+$ . venv/bin/activate
+
+(venv) $ pip install -r requirements.txt
+...
+
+(venv) $ pre-commit install
+pre-commit installed at .../.git/hooks/pre-commit
+```
+
+***
+
 ### `.pre-commit-config.yaml`
 
 ```yaml
@@ -41,16 +64,6 @@ repos:
     rev: v0.641
     hooks:
     -   id: mypy
-```
-
-***
-
-### `requirements.txt`
-
-```
-# ...
-pre-commit
-pytest
 ```
 
 ***
