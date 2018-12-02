@@ -11,6 +11,11 @@ def compute_for_loop(s: str) -> int:
     return ret
 
 
+def compute_golf(s: str) -> int:
+    """would be written lambda s:eval(f'({s})') for full golfing"""
+    return eval(f'({s})')
+
+
 def compute(s: str) -> int:
     return sum(int(line) for line in s.splitlines())
 
