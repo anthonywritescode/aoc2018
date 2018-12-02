@@ -36,6 +36,19 @@ def compute_difflib(s: str) -> str:
     raise AssertionError('unreachable!')
 
 
+def compute_sort(s: str) -> str:  # O(N * log(N) + O(N) * O(M))
+    lines = sorted(s.splitlines())  # O(N * log(N))
+    for line, other_line in zip(lines, lines[1:]):  # O(N)
+        assert len(line) == len(other_line), (line, other_line)
+        ret = ''
+        for c1, c2 in zip(line, other_line):  # O(M)
+            if c1 == c2:
+                ret += c1
+        if len(ret) == len(line) - 1:
+            return ret
+    raise AssertionError('unreachable!')
+
+
 def _to_substrings(s: str) -> Set[str]:  # O(M) work + O(M) space
     """bar => {'ar', 'br', 'ba'}"""
     return {s[:i] + s[i + 1:] for i in range(len(s))}
@@ -72,6 +85,7 @@ def test_to_substrings(input_s: str, expected: Set[str]) -> None:
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
+        # compute_difflib fails this test case, it can't handle strings < 3
         ('a\nb\n', ''),
         (
             'abcde\n'
@@ -84,6 +98,9 @@ def test_to_substrings(input_s: str, expected: Set[str]) -> None:
 
             'fgij',
         ),
+        # maybe not a valid testcase, the problem only has a unique solution
+        # the compute_sort fails this testcase
+        ('zaa\nyaa\nabb\nbbb\n', 'aa'),
     ),
 )
 def test(input_s: str, expected: str) -> None:
