@@ -6,7 +6,203 @@
     </head>
     <body>
         <div class="reveal">
-            <div class="slides"><section></section></div>
+            <div class="slides"><section><h2>advent of code 2018</h2>
+<h3>day 1 - chronal calibration</h3>
+</section><section><p><a href="https://adventofcode.com/2018/day/1">adventofcode.com/2018/day/1</a></p>
+</section><section><h3>problem description</h3>
+<ul>
+<li>zapped back in time to solve the changing of santa's history</li>
+<li>day 1 you must calibrate your time travel device!</li>
+</ul>
+</section><section><h3>example input</h3>
+<p>Inputs are a series of signed integers one per line</p>
+<div class="highlight"><pre><span></span>+1   #  0  =&gt;  1
+-2   #  1  =&gt; -1
++3   # -1  =&gt;  2
++1   #  2  =&gt;  3
+</pre></div>
+</section><section><h3>actual input</h3>
+<ul>
+<li>everyone gets their own input*</li>
+<li>mine was 1004 lines, yours may vary</li>
+</ul>
+<small>* not totally unique -- based on start time</small></section><section><h3>part 1</h3>
+<ul>
+<li><p>run through the list and print the final value</p>
+</li>
+<li><p><code>+1  +1  +1</code> results in <code>3</code></p>
+</li>
+<li><code>+1  +1  -2</code> results in <code>0</code></li>
+<li><code>-1  -2  -3</code> results in <code>-6</code></li>
+</ul>
+</section><section><h2><strong>SPOILERS AHEAD</strong></h2>
+</section><section><h3>part 1 - in words</h3>
+<ul>
+<li>keep track of the current frequency (starting at 0)</li>
+<li>parse the input line by line</li>
+<li>add the parsed value to the current frequency</li>
+<li>at the end produce the final value</li>
+</ul>
+</section><section><h3>part 1 - code</h3>
+<p>keep track of the current frequency</p>
+<div class="highlight python"><pre><span></span><span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="o">...</span>
+</pre></div>
+</section><section><h3>part 1 - code</h3>
+<p>parse the input line by line</p>
+<div class="highlight python"><pre><span></span>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+        <span class="o">..</span>
+</pre></div>
+<ul>
+<li>could use <code>s.split('\n')</code> as well</li>
+<li><code>splitlines()</code> is more portable and has fewer edgecases</li>
+</ul>
+</section><section><h3><code>splitlines()</code></h3>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;foo</span><span class="se">\n</span><span class="s1">bar</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">[&#39;foo&#39;, &#39;bar&#39;, &#39;&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;foo</span><span class="se">\n</span><span class="s1">bar</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="go">[&#39;foo&#39;, &#39;bar&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;foo</span><span class="se">\r\n</span><span class="s1">bar&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">[&#39;foo\r&#39;, &#39;bar&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;foo</span><span class="se">\r\n</span><span class="s1">bar&#39;</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="go">[&#39;foo&#39;, &#39;bar&#39;]</span>
+</pre></div>
+</section><section><h3>part 1 - code</h3>
+<p>add the parsed value to the current frequency</p>
+<div class="highlight python"><pre><span></span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+    <span class="n">val</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+<p><code>int(...)</code> does the heavy lifting for parsing here so we don't have to!</p>
+</section><section><h3>part 1 - code</h3>
+<p>at the end produce the final value</p>
+<div class="highlight python"><pre><span></span><span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+        <span class="n">val</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">val</span>
+</pre></div>
+</section><section><h3>part 1 - running</h3>
+<div class="highlight pytest"><pre><span></span>$ pytest -q day1/part1.py
+<span class=" -Color -Color-Green">....</span>                                                                 <span class=" -Color -Color-Cyan">[100%]</span>
+<span class=" -Color -Color-BoldGreen">4 passed in 0.01 seconds</span>
+</pre></div>
+<div class="highlight console"><pre><span></span><span class="gp">$</span> python day1/part1.py day1/input.txt
+<span class="go">587</span>
+</pre></div>
+</section><section><h3>part 1 - other solutions</h3>
+<p>functional programming one liner</p>
+<div class="highlight python"><pre><span></span><span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
+</pre></div>
+<p>code golf</p>
+<div class="highlight python"><pre><span></span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span><span class="nb">eval</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;({s})&#39;</span><span class="p">)</span>
+</pre></div>
+</section><section><h3>part 2</h3>
+<ul>
+<li>the device keeps producing the instructions in a loop</li>
+<li>find the first time a frequency is hit more than once</li>
+</ul>
+<div class="highlight"><pre><span></span>+1  #  0 =&gt;  1
+-2  #  1 =&gt; -1
++3  # -1 =&gt;  2
++1  #  2 =&gt;  3
+(at this point the device starts again)
++1  #  3 =&gt;  4
+-2  #  4 =&gt;  2 (which has been seen before!)
+</pre></div>
+</section><section><h3>part 2</h3>
+<ul>
+<li><code>+1, -1</code> first reaches <code>0</code> twice</li>
+<li><code>+3, +3, +4, -2, -4</code> first reaches <code>10</code> twice</li>
+<li><code>-6, +3, +8, +5, -6</code> first reaches <code>5</code> twice</li>
+<li><code>+7, +7, -2, -7, -4</code> first reaches <code>14</code> twice</li>
+</ul>
+</section><section><h2><strong>SPOILERS AHEAD</strong></h2>
+</section><section><h3>part 2 - in words</h3>
+<ul>
+<li>keep track of the current value and all already seen</li>
+<li>parse line by line (repeatedly)<ul>
+<li>add to the current value</li>
+<li>if it's seen before you're done</li>
+<li>otherwise record it has been seen</li>
+</ul>
+</li>
+</ul>
+</section><section><h3>part 2 - code</h3>
+<p>keep track of the current value and all already seen</p>
+<div class="highlight python"><pre><span></span><span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="p">{</span><span class="n">val</span><span class="p">}</span>
+
+    <span class="o">...</span>
+</pre></div>
+</section><section><h3>part 2 - code</h3>
+<p>parse line by line repeatedly</p>
+<div class="highlight python"><pre><span></span><span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+        <span class="o">...</span>
+</pre></div>
+<p>or</p>
+<div class="highlight python"><pre><span></span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()):</span>
+    <span class="o">...</span>
+</pre></div>
+</section><section><h3><code>itertools.cycle</code></h3>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iterator</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">next</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">next</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">next</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">next</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">next</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">next</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</section><section><h3>part 2 - code</h3>
+<p>update and check</p>
+<div class="highlight python"><pre><span></span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()):</span>
+    <span class="n">val</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">val</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+</pre></div>
+</section><section><h3>part 2 - code</h3>
+<div class="highlight python"><pre><span></span><span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="p">{</span><span class="n">val</span><span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()):</span>
+        <span class="n">val</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">val</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+</pre></div>
+</section><section><h3>part 2 - running</h3>
+<div class="highlight pytest"><pre><span></span>$ pytest -q day1/part2.py
+<span class=" -Color -Color-Green">.....</span>                                                                <span class=" -Color -Color-Cyan">[100%]</span>
+<span class=" -Color -Color-BoldGreen">5 passed in 0.01 seconds</span>
+</pre></div>
+<div class="highlight console"><pre><span></span><span class="gp">$</span> python day1/part2.py day1/input.txt
+<span class="go">83130</span>
+</pre></div>
+</section><section><h3>see you for day 2!</h3>
+<ul>
+<li><a href="https://twitch.tv/anthonywritescode">twitch.tv/anthonywritescode</a></li>
+<li><a href="https://github.com/anthonywritescode/aoc2018">github.com/anthonywritescode/aoc2018</a></li>
+</ul>
+</section></div>
         </div>
         <script src="build/presentation.js"></script>
         <script>
