@@ -7,7 +7,7 @@ for line in lines:
     for candidate in lines:
         var c = 0
         var lastc = -1
-        for i in 0..len(line):
+        for i in 0..len(line) - 1:
             if line[i] != candidate[i]:
                 c += 1
                 lastc = i
