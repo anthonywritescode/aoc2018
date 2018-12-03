@@ -4,8 +4,7 @@ import tables
 
 let lines = strutils.splitLines(readFile(os.paramStr(1)))
 
-var twos = 0
-var threes = 0
+var twos, threes: int
 for line in lines:
     var counter = initCountTable[char]()
     for c in line:
@@ -20,8 +19,8 @@ for line in lines:
             hasThree = true
 
     if hasTwo:
-        twos += 1
+        inc twos
     if hasThree:
-        threes += 1
+        inc threes
 
 echo twos * threes
