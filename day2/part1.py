@@ -25,6 +25,24 @@ def compute_golf(s: str) -> int:
     return count_counts[2] * count_counts[3]
 
 
+def compute_char_subtract(s: str) -> int:
+    twos = threes = 0
+    for line in s.splitlines():
+        line_list = list(line)
+        for c in set(line_list):
+            line_list.remove(c)
+        two_plus = set(line_list)
+        for c in two_plus:
+            line_list.remove(c)
+        three_plus = set(line_list)
+        for c in three_plus:
+            line_list.remove(c)
+        four_plus = set(line_list)
+        twos += bool(two_plus - three_plus)
+        threes += bool(three_plus - four_plus)
+    return twos * threes
+
+
 def compute(s: str) -> int:
     count_counts: Counter[int] = collections.Counter()
     for line in s.splitlines():  # O(N') N = number of lines
