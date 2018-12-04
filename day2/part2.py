@@ -59,13 +59,11 @@ def compute(s: str) -> str:  # O(N * M)
     seen: Set[str] = set()
 
     for line in s.splitlines():  # O(N)
-        new_substrings = _to_substrings(line)
-        already_seen = new_substrings & seen  # O(M)
-        if already_seen:
-            answer, = already_seen
-            return answer
-        else:
-            seen.update(new_substrings)  # O(N * M) space
+        for substr in _to_substrings(line):  # O(M)
+            if substr in seen:
+                return substr
+            else:
+                seen.add(substr)
     else:
         raise AssertionError('unreachable!')
 
