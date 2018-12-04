@@ -6,7 +6,7 @@ from typing import DefaultDict
 import pytest
 
 
-PATTERN = re.compile(r'^#(\d)+ @ (\d+),(\d+): (\d+)x(\d+)$')
+PATTERN = re.compile(r'^#(\d+) @ (\d+),(\d+): (\d+)x(\d+)$')
 
 
 def compute(s: str) -> int:
