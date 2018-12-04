@@ -37,6 +37,7 @@ def compute_difflib(s: str) -> str:
 
 
 def compute_sort(s: str) -> str:  # O(N * log(N) + O(N) * O(M))
+    """does not always work, see test cases"""
     lines = sorted(s.splitlines())  # O(N * log(N))
     for line, other_line in zip(lines, lines[1:]):  # O(N)
         assert len(line) == len(other_line), (line, other_line)
@@ -101,6 +102,8 @@ def test_to_substrings(input_s: str, expected: Set[str]) -> None:
         # maybe not a valid testcase, the problem only has a unique solution
         # the compute_sort fails this testcase
         ('zaa\nyaa\nabb\nbbb\n', 'aa'),
+        # compute_sort fails this
+        ('zaa\nbaa\nbbb', 'aa'),
     ),
 )
 def test(input_s: str, expected: str) -> None:
