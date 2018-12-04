@@ -6,7 +6,143 @@
     </head>
     <body>
         <div class="reveal">
-            <div class="slides"><section></section></div>
+            <div class="slides"><section><h2>advent of code 2018</h2>
+<h3>day 2 - inventory management system</h3>
+</section><section><p><a href="https://adventofcode.com/2018/day/2">adventofcode.com/2018/day/2</a></p>
+</section><section><h3>problem description</h3>
+<ul>
+<li>have to find <em>magic</em> fabric in bins!</li>
+<li>the bins have ids which are characters</li>
+</ul>
+</section><section><h3>part 1</h3>
+<ul>
+<li>compute a "checksum"</li>
+<li>count boxes which have exactly 2 of any letter</li>
+<li>count boxes which have exactly 3 of any letter</li>
+<li>multiply those together</li>
+</ul>
+</section><section><h3>part 1 - example</h3>
+<div class="highlight"><pre><span></span>abcdef   # nothing
+bababc   # 2 (a)    3 (b)
+abbcde   # 2 (b)
+abcccd   #          3 (c)
+aabcdd   # 2 (a, d)           (only counts once)
+abcdee   # 2 (e)
+ababab   #          3 (a, b)  (only counts once)
+
+=&gt; # of 2s: 4
+=&gt; # of 3s: 3
+=&gt; checksum 3 * 4 =&gt; 12
+</pre></div>
+</section><section><h3>part 1</h3>
+<ul>
+<li>keep track of number of twos and threes</li>
+<li>for each id, figure out the counts of each character</li>
+<li>update the twos and threes counts</li>
+<li>finally return threes times fours</li>
+</ul>
+</section><section><h2>spoilers</h2>
+</section><section><h3>part 1 - hints</h3>
+<p><code>collections.Counter</code></p>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="s1">&#39;cccaab&#39;</span><span class="p">)</span>
+<span class="go">Counter({&#39;c&#39;: 3, &#39;a&#39;: 2, &#39;b&#39;: 1})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="s1">&#39;cccaab&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">dict_values([3, 2, 1])</span>
+</pre></div>
+</section><section><h3>part 1 solution 1</h3>
+<p>(psuedo code this time!)</p>
+<div class="highlight"><pre><span></span>twos = threes = 0
+for each line in the input
+    make a counter of the line
+    if some count is 2
+        increment twos
+    if some count is 3
+        increment threes
+return threes * twos
+</pre></div>
+</section><section><h3>part 1 alternate solution</h3>
+<p>not more efficient, just a cool solution a follower found</p>
+<div class="highlight"><pre><span></span>twos = threes = 0
+for each line in the input
+    chars = list(line)
+
+    chars -= set(chars)
+    line_twos = set(chars)
+
+    chars -= set(chars)
+    line_threes = set(chars)
+
+    chars -= set(chars)
+    line_fours = set(chars)
+
+    twos += bit(line_twos - line_threes)
+    threes += bit(line_threes - line_fours)
+
+return twos * threes
+</pre></div>
+</section><section><h3>part 2</h3>
+<p>somewhat unrelated to part 1!</p>
+<ul>
+<li>find the ids which differ by only a character</li>
+<li>return the characters that are the same</li>
+</ul>
+</section><section><h3>part 2 - sample input</h3>
+<div class="highlight"><pre><span></span>abcde
+fghij  &lt;==
+klmno
+pqrst
+fguij  &lt;==
+axcye
+wvxyz
+</pre></div>
+<p>only differ by the third character, answer is <code>fgij</code></p>
+</section><section><h2>spoilers</h2>
+</section><section><h3>part 2 - hints</h3>
+<p><code>zip</code> is helpful for comparing iterables</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; for c1, c2 in zip(&#39;abc&#39;, &#39;def&#39;):
+...     print(c1, c2)
+...
+a d
+b e
+c f
+&gt;&gt;&gt; list(zip([1, 2, 3], [4, 5, 6]))
+[(1, 4), (2, 5), (3, 6)]
+</pre></div>
+</section><section><h3>part 2 - solution "compare them all"</h3>
+<div class="highlight"><pre><span></span>for each line in the input
+    for each other line in the input
+        answer = &#39;&#39;
+        loop through each character in line and other line (zip)
+            if they are the same append to answer
+        if answer is one shorter than line
+            return answer
+</pre></div>
+<p>O(N^2) time | O(N) space</p>
+</section><section><h3>part 2 - alternate comparison</h3>
+<p><code>difflib</code> - compare text!</p>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">difflib</span><span class="o">.</span><span class="n">ndiff</span><span class="p">((</span><span class="s1">&#39;aaaaabaaaa</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,),</span> <span class="p">(</span><span class="s1">&#39;aaaaacaaaa</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,))))</span>
+<span class="go">- aaaaabaaaa</span>
+<span class="go">?      ^</span>
+<span class="go">+ aaaaacaaaa</span>
+<span class="go">?      ^</span>
+</pre></div>
+<p>"count the number of ^ characters to see if it is 1 different"</p>
+</section><section><h3>part 2 alternate solution</h3>
+<div class="highlight"><pre><span></span>keep track of seen
+for each line in the input     # O(N)
+    for each substring of line without a character  # O(M)
+        if it is in seen before
+            return the answer
+        else:
+            record the substring as seen
+</pre></div>
+<p>O(N <em> M) time | O(N </em> M) space  (N = number of lines, M = line length)</p>
+</section><section><h3>see you for day 3!</h3>
+<ul>
+<li><a href="https://twitch.tv/anthonywritescode">twitch.tv/anthonywritescode</a></li>
+<li><a href="https://github.com/anthonywritescode/aoc2018">github.com/anthonywritescode/aoc2018</a></li>
+</ul>
+</section></div>
         </div>
         <script src="build/presentation.js"></script>
         <script>
