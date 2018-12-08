@@ -1,32 +1,28 @@
 import argparse
-from typing import List
+import collections
+from typing import DefaultDict
 from typing import Set
-from typing import Tuple
 
 import pytest
 
 
 def compute(s: str) -> str:
-    deps: List[Tuple[str, str]] = []
+    rdeps: DefaultDict[str, Set[str]] = collections.defaultdict(set)
     all_letters: Set[str] = set()
 
     for line in s.splitlines():
         p_from, p_to = line[5], line[36]
-        deps.append((p_from, p_to))
+        rdeps[p_to].add(p_from)
         all_letters.update(p_from, p_to)
 
     ret = ''
     while all_letters:
-        candidates = []
-
-        for c in all_letters:
-            if sum(1 for _, c2 in deps if c2 == c) == 0:
-                candidates.append(c)
-
-        answer = sorted(candidates)[0]
+        candidates = [(len(rdeps[k]), k) for k in all_letters]
+        _, answer = sorted(candidates)[0]
         ret += answer
         all_letters.remove(answer)
-        deps = [(p_from, p_to) for p_from, p_to in deps if p_from != answer]
+        for v in rdeps.values():
+            v.discard(answer)
 
     return ret
 
