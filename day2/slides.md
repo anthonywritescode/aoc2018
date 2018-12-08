@@ -90,20 +90,20 @@ not more efficient, just a cool solution a follower found
 
 ```
 twos = threes = 0
-for each line in the input
-    chars = list(line)
+for each line in the input      # aaabbcdddd
+    chars = list(line)          # [a, a, a, b, b, c, d, d, d, d]
 
-    chars -= set(chars)
-    line_twos = set(chars)
+    chars -= set(chars)         # [a, a, b, d, d, d]
+    line_twos = set(chars)      # {a, b, d}
 
-    chars -= set(chars)
-    line_threes = set(chars)
+    chars -= set(chars)         # [a, d, d]
+    line_threes = set(chars)    # {a, d}
 
-    chars -= set(chars)
-    line_fours = set(chars)
+    chars -= set(chars)         # [d]
+    line_fours = set(chars)     # {d}
 
-    twos += bit(line_twos - line_threes)
-    threes += bit(line_threes - line_fours)
+    twos += bool(line_twos - line_threes)
+    threes += bool(line_threes - line_fours)
 
 return twos * threes
 ```
@@ -154,6 +154,8 @@ c f
 [(1, 4), (2, 5), (3, 6)]
 ```
 
+_hint: use this to compare the lines_
+
 ***
 
 ### part 2 - solution "compare them all"
@@ -193,6 +195,7 @@ O(N^2) time | O(N) space
 ```
 keep track of seen
 for each line in the input     # O(N)
+    # abcd => bcd, acd, abc
     for each substring of line without a character  # O(M)
         if it is in seen before
             return the answer
@@ -200,7 +203,7 @@ for each line in the input     # O(N)
             record the substring as seen
 ```
 
-O(N * M) time | O(N * M) space  (N = number of lines, M = line length)
+O(N \* M) time | O(N \* M) space  (N = number of lines, M = line length)
 
 ***
 
