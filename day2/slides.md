@@ -41,16 +41,16 @@ ababab   #          3 (a, b)  (only counts once)
 
 ***
 
+## spoilers
+
+***
+
 ### part 1
 
 - keep track of number of twos and threes
 - for each id, figure out the counts of each character
 - update the twos and threes counts
 - finally return threes times fours
-
-***
-
-## spoilers
 
 ***
 
