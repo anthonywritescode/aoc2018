@@ -1,5 +1,6 @@
 import argparse
 import collections
+import sys
 from typing import Counter
 from typing import Optional
 from typing import Set
@@ -31,30 +32,32 @@ def min_coord_by_position(
 
 def compute(s: str) -> int:
     coords = set()
+    min_x, min_y = sys.maxsize, sys.maxsize
     max_x, max_y = 0, 0
 
     for line in s.splitlines():
         xs, ys = line.split(',')
         x, y = int(xs), int(ys)
         max_x, max_y = max(max_x, x), max(max_y, y)
+        min_x, min_y = min(min_x, x), min(min_y, y)
         coords.add((x, y))
 
     counts_by_coord: Counter[Tuple[int, int]] = collections.Counter()
 
-    for x in range(max_x):
-        for y in range(max_y):
+    for x in range(min_x, max_x):
+        for y in range(min_y, max_y):
             min_coord = min_coord_by_position(x, y, coords, max_x, max_y)
             if min_coord is not None:
                 counts_by_coord[min_coord] += 1
 
-    for x in range(max_x):
-        for y in (-1, max_y + 1):
+    for x in range(min_x, max_x):
+        for y in (min_y - 1, max_y + 1):
             min_coord = min_coord_by_position(x, y, coords, max_x, max_y)
             if min_coord is not None:
                 counts_by_coord.pop(min_coord, None)
 
-    for y in range(max_y):
-        for x in (-1, max_x + 1):
+    for y in range(min_y, max_y):
+        for x in (min_x - 1, max_x + 1):
             min_coord = min_coord_by_position(x, y, coords, max_x, max_y)
             if min_coord is not None:
                 counts_by_coord.pop(min_coord, None)
