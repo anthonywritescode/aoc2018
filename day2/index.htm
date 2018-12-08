@@ -63,20 +63,20 @@ return threes * twos
 </section><section><h3>part 1 alternate solution</h3>
 <p>not more efficient, just a cool solution a follower found</p>
 <div class="highlight"><pre><span></span>twos = threes = 0
-for each line in the input
-    chars = list(line)
+for each line in the input      # aaabbcdddd
+    chars = list(line)          # [a, a, a, b, b, c, d, d, d, d]
 
-    chars -= set(chars)
-    line_twos = set(chars)
+    chars -= set(chars)         # [a, a, b, d, d, d]
+    line_twos = set(chars)      # {a, b, d}
 
-    chars -= set(chars)
-    line_threes = set(chars)
+    chars -= set(chars)         # [a, d, d]
+    line_threes = set(chars)    # {a, d}
 
-    chars -= set(chars)
-    line_fours = set(chars)
+    chars -= set(chars)         # [d]
+    line_fours = set(chars)     # {d}
 
-    twos += bit(line_twos - line_threes)
-    threes += bit(line_threes - line_fours)
+    twos += bool(line_twos - line_threes)
+    threes += bool(line_threes - line_fours)
 
 return twos * threes
 </pre></div>
@@ -108,6 +108,7 @@ c f
 &gt;&gt;&gt; list(zip([1, 2, 3], [4, 5, 6]))
 [(1, 4), (2, 5), (3, 6)]
 </pre></div>
+<p><em>hint: use this to compare the lines</em></p>
 </section><section><h3>part 2 - solution "compare them all"</h3>
 <div class="highlight"><pre><span></span>for each line in the input
     for each other line in the input
@@ -130,13 +131,14 @@ c f
 </section><section><h3>part 2 alternate solution</h3>
 <div class="highlight"><pre><span></span>keep track of seen
 for each line in the input     # O(N)
+    # abcd =&gt; bcd, acd, abc
     for each substring of line without a character  # O(M)
         if it is in seen before
             return the answer
         else:
             record the substring as seen
 </pre></div>
-<p>O(N <em> M) time | O(N </em> M) space  (N = number of lines, M = line length)</p>
+<p>O(N * M) time | O(N * M) space  (N = number of lines, M = line length)</p>
 </section><section><h3>see you for day 3!</h3>
 <ul>
 <li><a href="https://twitch.tv/anthonywritescode">twitch.tv/anthonywritescode</a></li>
