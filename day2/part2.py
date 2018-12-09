@@ -51,23 +51,18 @@ def compute_sort(s: str) -> str:  # O(N * log(N) + O(N) * O(M))
     raise AssertionError('unreachable!')
 
 
-TSubstring = Tuple[Tuple[str, int], ...]
-
-
-def _to_substrings(s: str) -> List[TSubstring]:
+def _to_substrings(s: str) -> List[Tuple[str, int]]:  # O(M) work + O(M) space
     """bar => {'ar', 'br', 'ba'}"""
-    # O(M) work + O(M) space
-    zipped = tuple(zip(s, range(len(s))))
-    return [zipped[:i] + zipped[i + 1:] for i in range(len(s))]
+    return [(s[:i] + s[i + 1:], i) for i in range(len(s))]
 
 
 def compute(s: str) -> str:  # O(N * M)
-    seen: Set[TSubstring] = set()
+    seen: Set[Tuple[str, int]] = set()
 
     for line in s.splitlines():  # O(N)
         for substr in _to_substrings(line):  # O(M)
             if substr in seen:
-                return ''.join(c for c, _ in substr)
+                return substr[0]
             else:
                 seen.add(substr)
     else:
@@ -78,18 +73,11 @@ def compute(s: str) -> str:  # O(N * M)
     ('input_s', 'expected'),
     (
         ('', []),
-        ('a', [()]),
-        (
-            'bar',
-            [
-                (('a', 1), ('r', 2)),
-                (('b', 0), ('r', 2)),
-                (('b', 0), ('a', 1)),
-            ],
-        ),
+        ('a', [('', 0)]),
+        ('bar', [('ar', 0), ('br', 1),  ('ba', 2)]),
     ),
 )
-def test_to_substrings(input_s: str, expected: List[TSubstring]) -> None:
+def test_to_substrings(input_s: str, expected: List[Tuple[str, int]]) -> None:
     assert _to_substrings(input_s) == expected
 
 
