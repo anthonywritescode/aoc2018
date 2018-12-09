@@ -49,11 +49,11 @@ $ find -maxdepth 1 -type d -name 'day*' -not -name day0 | sort | xargs --replace
 > 1971 μs (orig)
 + python ./day2/part2.py ./day2/input.txt
 mxhwoglxgeauywfkztndcvjqr
-> 2028 μs (substrings)
+> 2131 μs (substrings)
 mxhwoglxgeauywfkztndcvjqr
-> 3568 ms (difflib)
+> 3056 ms (difflib)
 mxhwoglxgeauywfkztndcvjqr
-> 123 ms (orig)
+> 102 ms (orig)
 + python ./day3/part1.py ./day3/input.txt
 109143
 > 262 ms

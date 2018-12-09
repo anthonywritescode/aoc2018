@@ -4,37 +4,34 @@ from typing import Set
 
 import pytest
 
+from support import every_other
 from support import timing
 
 
 def compute_orig(s: str) -> str:  # O(N^2 * M)
     lines = s.splitlines()
-    for line in lines:  # O(N)
-        for other_line in lines:  # O(N)
-            assert len(line) == len(other_line), (line, other_line)
-            ret = ''
-            for c1, c2 in zip(line, other_line):  # O(M)
-                if c1 == c2:
-                    ret += c1
-            if len(ret) == len(line) - 1:
-                return ret
+    for line, other_line in every_other(lines):  # O(N^2)
+        assert len(line) == len(other_line), (line, other_line)
+        ret = ''
+        for c1, c2 in zip(line, other_line):  # O(M)
+            if c1 == c2:
+                ret += c1
+        if len(ret) == len(line) - 1:
+            return ret
     raise AssertionError('unreachable!')
 
 
 def compute_difflib(s: str) -> str:
     """does not work for len(line) < 3"""
     lines = s.splitlines(True)
-    for line in lines:
-        for other_line in lines:
-            if line == other_line:
-                continue
-            diffs = tuple(difflib.ndiff((line,), (other_line,)))
-            if len(diffs) != 4:
-                continue
-            context_line = diffs[-1]
-            if context_line.count('^') == 1 and '+' not in context_line:
-                i = context_line.index('^')
-                return diffs[0][:i].lstrip('- ') + diffs[0][i + 1:].strip()
+    for line, other_line in every_other(lines):
+        diffs = tuple(difflib.ndiff((line,), (other_line,)))
+        if len(diffs) != 4:
+            continue
+        context_line = diffs[-1]
+        if context_line.count('^') == 1 and '+' not in context_line:
+            i = context_line.index('^')
+            return diffs[0][:i].lstrip('- ') + diffs[0][i + 1:].strip()
     raise AssertionError('unreachable!')
 
 
