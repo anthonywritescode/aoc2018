@@ -36,7 +36,7 @@ def compute(s: str, *, procs: int, duration: int) -> int:
                 workers[i] = (t + duration + ord(c) - ord('A') + 1, c)
                 assignable.remove(c)
 
-        t += 1  # TODO: jump ahead in time if there's no candidates
+        t = min(kv[0] for kv in workers if kv is not None)
 
         # reset any completed workers
         for i, val in enumerate(workers):
