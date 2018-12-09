@@ -6,7 +6,155 @@
     </head>
     <body>
         <div class="reveal">
-            <div class="slides"><section></section></div>
+            <div class="slides"><section><h2>advent of code 2018</h2>
+<h3>day 3 - no matter how you slice it</h3>
+</section><section><p><a href="https://adventofcode.com/2018/day/3">adventofcode.com/2018/day/3</a></p>
+</section><section><h3>problem description</h3>
+<ul>
+<li>now that you've acquired the magical fabric, we must cut it!</li>
+<li>each elf claims a rectangle cut of fabric is the right one</li>
+<li>unfortunately many claims overlap!</li>
+</ul>
+</section><section><h3>part 1</h3>
+<ul>
+<li>find how many squares are claimed by two or more</li>
+<li>each claim has an id, left, right, width, height<ul>
+<li><code>#123 @ 3,2: 5x4</code></li>
+</ul>
+</li>
+</ul>
+</section><section><h3>part 1</h3>
+<table class="noborder"><tr><td><div class="highlight"><pre><span></span>#1 @ 1,3: 4x4
+#2 @ 3,1: 4x4
+#3 @ 5,5: 2x2
+</pre></div>
+<p><code>X</code> = overlap</p>
+</td><td><div class="highlight"><pre><span></span>........
+...2222.
+...2222.
+.11XX22.
+.11XX22.
+.111133.
+.111133.
+........
+</pre></div>
+</td></tr></table></section><section><h2>spoilers</h2>
+</section><section><h3>part 1</h3>
+<ul>
+<li>parse the inputs</li>
+<li>plot the rectangles on a grid, incrementing counts</li>
+<li>find the number of counts <code>&gt; 1</code></li>
+</ul>
+</section><section><h3>part 1 - code</h3>
+<ul>
+<li>create a grid to plot the rectangles on</li>
+<li>arbitrarily sized grid</li>
+<li>alternatively: make a very large fixed sized grid</li>
+</ul>
+<div class="highlight python"><pre><span></span><span class="n">grid</span><span class="p">:</span> <span class="n">DefaultDict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">DefaultDict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+</pre></div>
+</section><section><h3>part 1 hints</h3>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>
+<span class="go">defaultdict(&lt;class &#39;int&#39;&gt;, {0: 0, 1: 1})</span>
+</pre></div>
+</section><section><h3>part 1 - code</h3>
+<ul>
+<li>parse each line and increment the grid</li>
+</ul>
+<div class="highlight python"><pre><span></span><span class="n">PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^#(\d+) @ (\d+),(\d+): (\d+)x(\d+)$&#39;</span><span class="p">)</span>
+</pre></div>
+<div class="highlight python"><pre><span></span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">PATTERN</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="n">left</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">left</span> <span class="o">+</span> <span class="n">width</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">top</span> <span class="o">+</span> <span class="n">height</span><span class="p">):</span>
+            <span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+</section><section><h3>part 1 - code</h3>
+<p>iterate through the grid and count the <code>&gt; 1</code> squares</p>
+<div class="highlight python"><pre><span></span><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="k">return</span> <span class="n">total</span>
+</pre></div>
+</section><section><h3>part 1</h3>
+<div class="highlight pytest"><pre><span></span>$ pytest -q day3/part1.py
+<span class=" -Color -Color-Green">.</span>                                                                    <span class=" -Color -Color-Cyan">[100%]</span>
+<span class=" -Color -Color-BoldGreen">1 passed in 0.01 seconds</span>
+</pre></div>
+<div class="highlight console"><pre><span></span><span class="gp">$</span> python3 day3/part1.py day3/input.txt
+<span class="go">109143</span>
+<span class="gp">&gt;</span> <span class="m">287</span> ms
+</pre></div>
+</section><section><h3>part 2</h3>
+<ul>
+<li>ok so lot's of stuff overlaps</li>
+<li>but apparently one claim does not! find it!</li>
+</ul>
+</section><section><h2>spoilers!</h2>
+</section><section><h3>part 2</h3>
+<ul>
+<li>parse claims</li>
+<li>compare each claim against each other claim</li>
+</ul>
+</section><section><h3>part 2</h3>
+<p>parsing similar to before, but this time parse to a <code>Claim</code> class</p>
+<div class="highlight python"><pre><span></span><span class="k">class</span> <span class="nc">Claim</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">left</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">top</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">width</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">int</span>
+</pre></div>
+</section><section><h3>part 2</h3>
+<ul>
+<li>implement an <code>overlaps</code> function</li>
+<li>I googled <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection">"rectangle collision detection"</a></li>
+</ul>
+<div class="highlight python"><pre><span></span>    <span class="k">def</span> <span class="nf">overlaps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s1">&#39;Claim&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;rectangle collision detection&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">width</span> <span class="ow">and</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">left</span> <span class="ow">and</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">height</span> <span class="ow">and</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">top</span>
+        <span class="p">)</span>
+</pre></div>
+</section><section><h3>part 2</h3>
+<p>loop through each claim and find the one without overlap</p>
+<div class="highlight python"><pre><span></span><span class="n">claims</span> <span class="o">=</span> <span class="p">[</span><span class="n">Claim</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()]</span>
+
+<span class="k">for</span> <span class="n">claim</span> <span class="ow">in</span> <span class="n">claims</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">other_claim</span> <span class="ow">in</span> <span class="n">claims</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">claim</span> <span class="o">!=</span> <span class="n">other_claim</span> <span class="ow">and</span> <span class="n">claim</span><span class="o">.</span><span class="n">overlaps</span><span class="p">(</span><span class="n">other_claim</span><span class="p">):</span>
+            <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># else block is run if there&#39;s never a `break`</span>
+        <span class="k">return</span> <span class="n">claim</span><span class="o">.</span><span class="n">id</span>
+</pre></div>
+</section><section><h3>part 2</h3>
+<div class="highlight pytest"><pre><span></span>$ pytest -q day3/part2.py
+<span class=" -Color -Color-Green">.</span>                                                                    <span class=" -Color -Color-Cyan">[100%]</span>
+<span class=" -Color -Color-BoldGreen">1 passed in 0.02 seconds</span>
+</pre></div>
+<div class="highlight console"><pre><span></span><span class="gp">$</span> python day3/part2.py day3/input.txt
+<span class="go">506</span>
+<span class="gp">&gt;</span> <span class="m">136</span> ms
+</pre></div>
+</section><section><h3>see you for day 4!</h3>
+<ul>
+<li><a href="https://twitch.tv/anthonywritescode">twitch.tv/anthonywritescode</a></li>
+<li><a href="https://github.com/anthonywritescode/aoc2018">github.com/anthonywritescode/aoc2018</a></li>
+</ul>
+</section></div>
         </div>
         <script src="build/presentation.js"></script>
         <script>
