@@ -1,6 +1,8 @@
 import argparse
 import difflib
+from typing import List
 from typing import Set
+from typing import Tuple
 
 import pytest
 
@@ -49,18 +51,23 @@ def compute_sort(s: str) -> str:  # O(N * log(N) + O(N) * O(M))
     raise AssertionError('unreachable!')
 
 
-def _to_substrings(s: str) -> Set[str]:  # O(M) work + O(M) space
+TSubstring = Tuple[Tuple[str, int], ...]
+
+
+def _to_substrings(s: str) -> List[TSubstring]:
     """bar => {'ar', 'br', 'ba'}"""
-    return {s[:i] + s[i + 1:] for i in range(len(s))}
+    # O(M) work + O(M) space
+    zipped = tuple(zip(s, range(len(s))))
+    return [zipped[:i] + zipped[i + 1:] for i in range(len(s))]
 
 
 def compute(s: str) -> str:  # O(N * M)
-    seen: Set[str] = set()
+    seen: Set[TSubstring] = set()
 
     for line in s.splitlines():  # O(N)
         for substr in _to_substrings(line):  # O(M)
             if substr in seen:
-                return substr
+                return ''.join(c for c, _ in substr)
             else:
                 seen.add(substr)
     else:
@@ -70,13 +77,19 @@ def compute(s: str) -> str:  # O(N * M)
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
-        ('', set()),
-        ('a', {''}),
-        ('bar', {'ar', 'br', 'ba'}),
-        ('foo', {'oo', 'fo'}),
+        ('', []),
+        ('a', [()]),
+        (
+            'bar',
+            [
+                (('a', 1), ('r', 2)),
+                (('b', 0), ('r', 2)),
+                (('b', 0), ('a', 1)),
+            ],
+        ),
     ),
 )
-def test_to_substrings(input_s: str, expected: Set[str]) -> None:
+def test_to_substrings(input_s: str, expected: List[TSubstring]) -> None:
     assert _to_substrings(input_s) == expected
 
 
@@ -101,6 +114,8 @@ def test_to_substrings(input_s: str, expected: Set[str]) -> None:
         ('zaa\nyaa\nabb\nbbb\n', 'aa'),
         # compute_sort fails this
         ('zaa\nbaa\nbbb', 'aa'),
+        # compute_substrings used to fail this
+        ('abcd\ndabc\naaaa\nbaaa', 'aaa'),
     ),
 )
 def test(input_s: str, expected: str) -> None:
