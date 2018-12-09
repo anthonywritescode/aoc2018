@@ -103,5 +103,7 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 > 25512 μs (circular dlist)
 + python day9/part2.py day9/input.txt
 2996043280
-> 1838 ms
+> 1912 ms (circular dlist)
+2996043280
+> 1044 ms (deque)
 ```
