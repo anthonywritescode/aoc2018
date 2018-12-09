@@ -97,4 +97,7 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 + python day9/part1.py day9/input.txt
 367802
 > 447 ms
++ python day9/part2.py day9/input.txt
+2996043280
+> 1838 ms
 ```
