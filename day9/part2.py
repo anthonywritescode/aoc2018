@@ -1,4 +1,5 @@
 import argparse
+import collections
 import itertools
 import re
 from typing import Optional
@@ -56,7 +57,7 @@ class Node:
         return self.right, self.val
 
 
-def compute(s: str) -> int:
+def compute_dlist(s: str) -> int:
     match = PATTERN.match(s.strip())
     assert match, s
     player_count, max_marble = int(match.group(1)), int(match.group(2))
@@ -79,6 +80,31 @@ def compute(s: str) -> int:
     return max(players)
 
 
+def compute(s: str) -> int:
+    match = PATTERN.match(s.strip())
+    assert match, s
+    player_count, max_marble = int(match.group(1)), int(match.group(2))
+
+    max_marble *= 100
+
+    circle = collections.deque([0])
+    players = [0] * player_count
+
+    for val, player_index in zip(
+            range(1, max_marble + 1),
+            itertools.cycle(range(player_count)),
+    ):
+        if val % 23 == 0:
+            players[player_index] += val
+            circle.rotate(7)
+            players[player_index] += circle.pop()
+            circle.rotate(-1)
+        else:
+            circle.rotate(-1)
+            circle.append(val)
+    return max(players)
+
+
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     # no sample inputs given
@@ -93,7 +119,10 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f, timing():
+    with open(args.data_file) as f, timing('circular dlist'):
+        print(compute_dlist(f.read()))
+
+    with open(args.data_file) as f, timing('deque'):
         print(compute(f.read()))
 
     return 0
