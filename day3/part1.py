@@ -25,7 +25,7 @@ def compute(s: str) -> int:
 
     total = 0
     for _, row in grid.items():
-        for _, val in row.items():
+        for val in row.values():
             if val > 1:
                 total += 1
 
