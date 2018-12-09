@@ -11,6 +11,10 @@ https://adventofcode.com/2018
     - [youtube](https://www.youtube.com/watch?v=TwaEIBXCWFE)
     - [slides](https://anthonywritescode.github.io/aoc2018/day1/)
     - [slides (markdown)](https://github.com/anthonywritescode/aoc2018/blob/master/day1/slides.md)
+- inventory management system - day 2
+    - [youtube](https://www.youtube.com/watch?v=ZU_bRzoBwbA)
+    - [slides](https://anthonywritescode.github.io/aoc2018/day2/)
+    - [slides (markdown)](https://github.com/anthonywritescode/aoc2018/blob/master/day2/slides.md)
 
 
 ### timing
