@@ -94,4 +94,7 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 > 19253 μs (iterative)
 23636
 > 16699 μs (recursive)
++ python day9/part1.py day9/input.txt
+367802
+> 447 ms
 ```
