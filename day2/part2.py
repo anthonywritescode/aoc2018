@@ -52,7 +52,7 @@ def compute_sort(s: str) -> str:  # O(N * log(N) + O(N) * O(M))
 
 
 def _to_substrings(s: str) -> List[Tuple[str, int]]:  # O(M) work + O(M) space
-    """bar => {'ar', 'br', 'ba'}"""
+    """bar => [('ar', 0), ('br', 1), ('ba', 2)}"""
     return [(s[:i] + s[i + 1:], i) for i in range(len(s))]
 
 
