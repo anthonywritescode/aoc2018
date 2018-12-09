@@ -32,7 +32,7 @@ def compute_difflib(s: str) -> str:
             if len(diffs) != 4:
                 continue
             context_line = diffs[-1]
-            if context_line.count('^') == 1:
+            if context_line.count('^') == 1 and '+' not in context_line:
                 i = context_line.index('^')
                 return diffs[0][:i].lstrip('- ') + diffs[0][i + 1:].strip()
     raise AssertionError('unreachable!')
