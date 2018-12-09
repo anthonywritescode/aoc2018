@@ -38,9 +38,7 @@ def compute(s: str) -> int:
 
     for claim in claims:
         for other_claim in claims:
-            if claim == other_claim:
-                continue
-            if claim.overlaps(other_claim):
+            if claim != other_claim and claim.overlaps(other_claim):
                 break
         else:
             return claim.id

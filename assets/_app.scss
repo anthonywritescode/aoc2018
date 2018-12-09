@@ -20,3 +20,11 @@ a:hover {
     .-Color-BoldYellow{ color: #c4a000; font-weight: bold; }
     .-Color-Yellow{ color: #c4a000; }
 }
+
+
+.noborder {
+    border: 0;
+    td {
+        border: 0 !important;
+    }
+}
