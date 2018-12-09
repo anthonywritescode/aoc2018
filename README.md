@@ -96,7 +96,11 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 > 16699 μs (recursive)
 + python day9/part1.py day9/input.txt
 367802
-> 447 ms
+> 98837 μs (list)
+367802
+> 10092 μs (deque)
+367802
+> 25512 μs (circular dlist)
 + python day9/part2.py day9/input.txt
 2996043280
 > 1838 ms
