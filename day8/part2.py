@@ -2,6 +2,7 @@ import argparse
 from typing import Any
 from typing import List
 from typing import NamedTuple
+from typing import Optional
 
 import pytest
 
@@ -42,11 +43,59 @@ def make_node(values: List[int]) -> Node:
     return node
 
 
-def compute(s: str) -> int:
+def compute_recursive(s: str) -> int:
     values = list(reversed([int(p) for p in s.split()]))
 
     root = make_node(values)
     return root.value()
+
+
+def compute(s: str) -> int:
+    children_children_stack: List[List[int]] = [[]]
+    orig_children_left_stack = [1]
+    children_left_stack = [1]
+    metadata_left_stack = [0]
+    child_count: Optional[int] = None
+    current_total = 0
+
+    for x in s.split():
+        val = int(x)
+
+        if not children_left_stack[-1] and not metadata_left_stack[-1]:
+            children_children_stack.pop()
+            orig_children_left_stack.pop()
+            children_left_stack.pop()
+            metadata_left_stack.pop()
+            children_children_stack[-1].append(current_total)
+            current_total = 0
+
+        if children_left_stack[-1]:
+            if child_count is None:
+                child_count = val
+            else:
+                children_left_stack[-1] -= 1
+
+                children_children_stack.append([])
+                children_left_stack.append(child_count)
+                orig_children_left_stack.append(child_count)
+                metadata_left_stack.append(val)
+
+                child_count = None
+        elif children_left_stack[-1] == 0 and metadata_left_stack[-1]:
+            metadata_left_stack[-1] -= 1
+            if orig_children_left_stack[-1]:
+                val -= 1
+                if val >= 0:
+                    try:
+                        current_total += children_children_stack[-1][val]
+                    except IndexError:
+                        pass
+            else:
+                current_total += val
+        else:
+            raise AssertionError('unreachable!')
+
+    return current_total
 
 
 @pytest.mark.parametrize(
