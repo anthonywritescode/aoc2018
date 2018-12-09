@@ -14,4 +14,81 @@
 </ul>
 </li>
 </ul>
+<h3>timing</h3>
+<ul>
+<li>comparing to these numbers isn't necessarily useful</li>
+<li>normalize your timing to day 1 part 1 and compare</li>
+<li>alternate implementations are listed in parens</li>
+<li>these timings are very non-scientific (sample size 1)</li>
+</ul>
+<div class="highlight console"><pre><span></span><span class="gp">$</span> find -maxdepth <span class="m">1</span> -type d -name <span class="s1">&#39;day*&#39;</span> -not -name day0 <span class="p">|</span> sort <span class="p">|</span> xargs --replace bash -xc <span class="s1">&#39;python {}/part1.py {}/input.txt; python {}/part2.py {}/input.txt&#39;</span>
+<span class="go">+ python ./day1/part1.py ./day1/input.txt</span>
+<span class="go">587</span>
+<span class="gp">&gt;</span> <span class="m">463</span> μs <span class="o">(</span>oneline<span class="o">)</span>
+<span class="go">587</span>
+<span class="gp">&gt;</span> <span class="m">962</span> μs <span class="o">(</span>golf<span class="o">)</span>
+<span class="go">587</span>
+<span class="gp">&gt;</span> <span class="m">437</span> μs <span class="o">(</span><span class="k">for</span> loop<span class="o">)</span>
+<span class="go">+ python ./day1/part2.py ./day1/input.txt</span>
+<span class="go">83130</span>
+<span class="gp">&gt;</span> <span class="m">71237</span> μs <span class="o">(</span>itertools<span class="o">)</span>
+<span class="go">83130</span>
+<span class="gp">&gt;</span> <span class="m">82161</span> μs <span class="o">(</span>non itertools<span class="o">)</span>
+<span class="go">+ python ./day2/part1.py ./day2/input.txt</span>
+<span class="go">6474</span>
+<span class="gp">&gt;</span> <span class="m">2944</span> μs <span class="o">(</span>counter counter<span class="o">)</span>
+<span class="go">6474</span>
+<span class="gp">&gt;</span> <span class="m">3224</span> μs <span class="o">(</span>char subtract<span class="o">)</span>
+<span class="go">6474</span>
+<span class="gp">&gt;</span> <span class="m">2079</span> μs <span class="o">(</span>golf<span class="o">)</span>
+<span class="go">6474</span>
+<span class="gp">&gt;</span> <span class="m">1971</span> μs <span class="o">(</span>orig<span class="o">)</span>
+<span class="go">+ python ./day2/part2.py ./day2/input.txt</span>
+<span class="go">mxhwoglxgeauywfkztndcvjqr</span>
+<span class="gp">&gt;</span> <span class="m">2028</span> μs <span class="o">(</span>substrings<span class="o">)</span>
+<span class="go">mxhwoglxgeauywfkztndcvjqr</span>
+<span class="gp">&gt;</span> <span class="m">3568</span> ms <span class="o">(</span>difflib<span class="o">)</span>
+<span class="go">mxhwoglxgeauywfkztndcvjqr</span>
+<span class="gp">&gt;</span> <span class="m">123</span> ms <span class="o">(</span>orig<span class="o">)</span>
+<span class="go">+ python ./day3/part1.py ./day3/input.txt</span>
+<span class="go">109143</span>
+<span class="gp">&gt;</span> <span class="m">262</span> ms
+<span class="go">+ python ./day3/part2.py ./day3/input.txt</span>
+<span class="go">506</span>
+<span class="gp">&gt;</span> <span class="m">132</span> ms
+<span class="go">+ python ./day4/part1.py ./day4/input.txt</span>
+<span class="go">60438</span>
+<span class="gp">&gt;</span> <span class="m">3201</span> μs
+<span class="go">+ python ./day4/part2.py ./day4/input.txt</span>
+<span class="go">47989</span>
+<span class="gp">&gt;</span> <span class="m">7153</span> μs
+<span class="go">+ python ./day5/part1.py ./day5/input.txt</span>
+<span class="go">9900</span>
+<span class="gp">&gt;</span> <span class="m">20292</span> μs
+<span class="go">+ python ./day5/part2.py ./day5/input.txt</span>
+<span class="go">4992</span>
+<span class="gp">&gt;</span> <span class="m">488</span> ms
+<span class="go">+ python ./day6/part1.py ./day6/input.txt</span>
+<span class="go">3647</span>
+<span class="gp">&gt;</span> <span class="m">2051</span> ms
+<span class="go">+ python ./day6/part2.py ./day6/input.txt</span>
+<span class="go">41605</span>
+<span class="gp">&gt;</span> <span class="m">9351</span> ms
+<span class="go">+ python ./day7/part1.py ./day7/input.txt</span>
+<span class="go">EUGJKYFQSCLTWXNIZMAPVORDBH</span>
+<span class="gp">&gt;</span> <span class="m">402</span> μs
+<span class="go">+ python ./day7/part2.py ./day7/input.txt</span>
+<span class="go">1014</span>
+<span class="gp">&gt;</span> <span class="m">488</span> μs
+<span class="go">+ python ./day8/part1.py ./day8/input.txt</span>
+<span class="go">47647</span>
+<span class="gp">&gt;</span> <span class="m">14382</span> μs <span class="o">(</span>iterative<span class="o">)</span>
+<span class="go">47647</span>
+<span class="gp">&gt;</span> <span class="m">18938</span> μs <span class="o">(</span>recursive<span class="o">)</span>
+<span class="go">+ python ./day8/part2.py ./day8/input.txt</span>
+<span class="go">23636</span>
+<span class="gp">&gt;</span> <span class="m">19253</span> μs <span class="o">(</span>iterative<span class="o">)</span>
+<span class="go">23636</span>
+<span class="gp">&gt;</span> <span class="m">16699</span> μs <span class="o">(</span>recursive<span class="o">)</span>
+</pre></div>
 </body></html>
