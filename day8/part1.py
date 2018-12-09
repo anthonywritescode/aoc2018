@@ -3,6 +3,7 @@ from typing import Any
 from typing import Callable
 from typing import List
 from typing import NamedTuple
+from typing import Optional
 
 import pytest
 
@@ -30,13 +31,43 @@ def make_node(values: List[int], cb: Callable[[int], None]) -> Node:
     return node
 
 
-def compute(s: str) -> int:
+def compute_recursive(s: str) -> int:
     values = list(reversed([int(p) for p in s.split()]))
 
     all_metadata: List[int] = []
     make_node(values, all_metadata.append)
 
     return sum(all_metadata)
+
+
+def compute(s: str) -> int:
+    total = 0
+    children_left_stack = [1]
+    metadata_left_stack = [0]
+    child_count: Optional[int] = None
+
+    for x in s.split():
+        val = int(x)
+
+        if not children_left_stack[-1] and not metadata_left_stack[-1]:
+            children_left_stack.pop()
+            metadata_left_stack.pop()
+
+        if children_left_stack[-1]:
+            if child_count is None:
+                child_count = val
+            else:
+                children_left_stack[-1] -= 1
+                children_left_stack.append(child_count)
+                metadata_left_stack.append(val)
+                child_count = None
+        elif children_left_stack[-1] == 0 and metadata_left_stack[-1]:
+            metadata_left_stack[-1] -= 1
+            total += val
+        else:
+            raise AssertionError('unreachable!')
+
+    return total
 
 
 @pytest.mark.parametrize(
