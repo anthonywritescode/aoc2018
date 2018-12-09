@@ -4,6 +4,8 @@ from typing import Set
 
 import pytest
 
+from support import timing
+
 
 def compute_orig(s: str) -> str:  # O(N^2 * M)
     lines = s.splitlines()
@@ -126,8 +128,12 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f:
+    with open(args.data_file) as f, timing('substrings'):
         print(compute(f.read()))
+    with open(args.data_file) as f, timing('difflib'):
+        print(compute_difflib(f.read()))
+    with open(args.data_file) as f, timing('orig'):
+        print(compute_orig(f.read()))
 
     return 0
 

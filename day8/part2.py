@@ -6,6 +6,8 @@ from typing import Optional
 
 import pytest
 
+from support import timing
+
 
 class Node(NamedTuple):
     # mypy doesn't yet support recursive types
@@ -113,8 +115,10 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f:
+    with open(args.data_file) as f, timing('iterative'):
         print(compute(f.read()))
+    with open(args.data_file) as f, timing('recursive'):
+        print(compute_recursive(f.read()))
 
     return 0
 

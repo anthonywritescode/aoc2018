@@ -3,6 +3,8 @@ import string
 
 import pytest
 
+from support import timing
+
 
 def reacted_length(s: str) -> int:
     s = s.strip()
@@ -38,7 +40,7 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f:
+    with open(args.data_file) as f, timing():
         print(compute(f.read()))
 
     return 0

@@ -5,6 +5,8 @@ from typing import Set
 
 import pytest
 
+from support import timing
+
 
 def compute(s: str) -> str:
     rdeps: DefaultDict[str, Set[str]] = collections.defaultdict(set)
@@ -52,7 +54,7 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f:
+    with open(args.data_file) as f, timing():
         print(compute(f.read()))
 
     return 0

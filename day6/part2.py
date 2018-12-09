@@ -3,6 +3,8 @@ import sys
 
 import pytest
 
+from support import timing
+
 
 def compute(s: str, bound: int) -> int:
     coords = set()
@@ -60,7 +62,7 @@ def main() -> int:
     parser.add_argument('--bound', type=int, default=10000)
     args = parser.parse_args()
 
-    with open(args.data_file) as f:
+    with open(args.data_file) as f, timing():
         print(compute(f.read(), args.bound))
 
     return 0

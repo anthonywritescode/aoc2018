@@ -5,6 +5,8 @@ from typing import Counter
 
 import pytest
 
+from support import timing
+
 
 def compute_orig(s: str) -> int:
     twos, threes = 0, 0
@@ -78,8 +80,14 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f:
+    with open(args.data_file) as f, timing('counter counter'):
         print(compute(f.read()))
+    with open(args.data_file) as f, timing('char subtract'):
+        print(compute_char_subtract(f.read()))
+    with open(args.data_file) as f, timing('golf'):
+        print(compute_golf(f.read()))
+    with open(args.data_file) as f, timing('orig'):
+        print(compute_orig(f.read()))
 
     return 0
 

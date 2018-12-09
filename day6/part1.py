@@ -8,6 +8,8 @@ from typing import Tuple
 
 import pytest
 
+from support import timing
+
 
 def min_coord_by_position(
         x: int,
@@ -90,7 +92,7 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f:
+    with open(args.data_file) as f, timing():
         print(compute(f.read()))
 
     return 0

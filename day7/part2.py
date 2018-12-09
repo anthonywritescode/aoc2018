@@ -8,6 +8,8 @@ from typing import Tuple
 
 import pytest
 
+from support import timing
+
 
 def compute(s: str, *, procs: int, duration: int) -> int:
     rdeps: DefaultDict[str, Set[str]] = collections.defaultdict(set)
@@ -81,7 +83,7 @@ def main() -> int:
     parser.add_argument('--duration', default=60, type=int)
     args = parser.parse_args()
 
-    with open(args.data_file) as f:
+    with open(args.data_file) as f, timing():
         print(compute(f.read(), procs=args.procs, duration=args.duration))
 
     return 0

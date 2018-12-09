@@ -3,6 +3,8 @@ import itertools
 
 import pytest
 
+from support import timing
+
 
 def compute_non_itertools(s: str) -> int:
     val = 0
@@ -50,8 +52,10 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f:
+    with open(args.data_file) as f, timing('itertools'):
         print(compute(f.read()))
+    with open(args.data_file) as f, timing('non itertools'):
+        print(compute_non_itertools(f.read()))
 
     return 0
 

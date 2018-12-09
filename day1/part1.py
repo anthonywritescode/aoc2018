@@ -2,6 +2,8 @@ import argparse
 
 import pytest
 
+from support import timing
+
 
 def compute_for_loop(s: str) -> int:
     ret = 0
@@ -38,8 +40,12 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f:
+    with open(args.data_file) as f, timing('oneline'):
         print(compute(f.read()))
+    with open(args.data_file) as f, timing('golf'):
+        print(compute_golf(f.read()))
+    with open(args.data_file) as f, timing('for loop'):
+        print(compute_for_loop(f.read()))
 
     return 0
 

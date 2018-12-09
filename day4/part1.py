@@ -10,6 +10,8 @@ from typing import Tuple
 
 import pytest
 
+from support import timing
+
 EVENT = re.compile(r'^\[\d{4}-\d{2}-\d{2} \d{2}:(\d{2})\]')
 BEGIN_SHIFT = re.compile(rf'{EVENT.pattern} Guard #(\d+) begins shift$')
 
@@ -97,7 +99,7 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f:
+    with open(args.data_file) as f, timing():
         print(compute(f.read()))
 
     return 0
