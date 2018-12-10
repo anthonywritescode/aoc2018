@@ -80,9 +80,9 @@ mxhwoglxgeauywfkztndcvjqr
 > 9351 ms
 + python day7/part1.py day7/input.txt
 EUGJKYFQSCLTWXNIZMAPVORDBH
-> 410 μs (orig)
+> 395 μs (orig)
 EUGJKYFQSCLTWXNIZMAPVORDBH
-> 170 μs (topo sort)
+> 157 μs (topo sort)
 + python ./day7/part2.py ./day7/input.txt
 1014
 > 488 μs

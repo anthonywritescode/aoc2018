@@ -1,4 +1,5 @@
 import argparse
+import bisect
 import collections
 from typing import DefaultDict
 from typing import Set
@@ -40,18 +41,18 @@ def compute(s: str) -> str:
         deps[p_from].add(p_to)
         all_letters.update((p_from, p_to))
 
-    no_deps = {c for c in all_letters if c not in rdeps}
+    i = 0
+    no_deps = sorted([c for c in all_letters if c not in rdeps])
 
-    ret = ''
-    while no_deps:
-        removed = min(no_deps)
-        ret += removed
-        no_deps.remove(removed)
+    while i < len(no_deps):
+        removed = no_deps[i]
+        i += 1
         for c in deps[removed]:
             rdeps[c].remove(removed)
             if not rdeps[c]:
-                no_deps.add(c)
-    return ret
+                bisect.insort_left(no_deps, c, i)
+
+    return ''.join(no_deps)
 
 
 @pytest.mark.parametrize(
