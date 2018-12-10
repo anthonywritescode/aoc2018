@@ -8,14 +8,14 @@ import pytest
 from support import timing
 
 
-def compute(s: str) -> str:
+def compute_orig(s: str) -> str:
     rdeps: DefaultDict[str, Set[str]] = collections.defaultdict(set)
     all_letters: Set[str] = set()
 
     for line in s.splitlines():
         p_from, p_to = line[5], line[36]
         rdeps[p_to].add(p_from)
-        all_letters.update(p_from, p_to)
+        all_letters.update((p_from, p_to))
 
     ret = ''
     while all_letters:
@@ -26,6 +26,31 @@ def compute(s: str) -> str:
         for v in rdeps.values():
             v.discard(answer)
 
+    return ret
+
+
+def compute(s: str) -> str:
+    deps: DefaultDict[str, Set[str]] = collections.defaultdict(set)
+    rdeps: DefaultDict[str, Set[str]] = collections.defaultdict(set)
+    all_letters: Set[str] = set()
+
+    for line in s.splitlines():
+        p_from, p_to = line[5], line[36]
+        rdeps[p_to].add(p_from)
+        deps[p_from].add(p_to)
+        all_letters.update((p_from, p_to))
+
+    no_deps = {c for c in all_letters if c not in rdeps}
+
+    ret = ''
+    while no_deps:
+        removed = min(no_deps)
+        ret += removed
+        no_deps.remove(removed)
+        for c in deps[removed]:
+            rdeps[c].remove(removed)
+            if not rdeps[c]:
+                no_deps.add(c)
     return ret
 
 
@@ -54,7 +79,10 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f, timing():
+    with open(args.data_file) as f, timing('orig'):
+        print(compute_orig(f.read()))
+
+    with open(args.data_file) as f, timing('topo sort'):
         print(compute(f.read()))
 
     return 0

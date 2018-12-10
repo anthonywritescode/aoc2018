@@ -78,9 +78,11 @@ mxhwoglxgeauywfkztndcvjqr
 + python ./day6/part2.py ./day6/input.txt
 41605
 > 9351 ms
-+ python ./day7/part1.py ./day7/input.txt
++ python day7/part1.py day7/input.txt
 EUGJKYFQSCLTWXNIZMAPVORDBH
-> 402 μs
+> 410 μs (orig)
+EUGJKYFQSCLTWXNIZMAPVORDBH
+> 170 μs (topo sort)
 + python ./day7/part2.py ./day7/input.txt
 1014
 > 488 μs
