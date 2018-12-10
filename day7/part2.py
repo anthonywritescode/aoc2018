@@ -1,4 +1,5 @@
 import argparse
+import bisect
 import collections
 from typing import DefaultDict
 from typing import List
@@ -11,7 +12,7 @@ import pytest
 from support import timing
 
 
-def compute(s: str, *, procs: int, duration: int) -> int:
+def compute_orig(s: str, *, procs: int, duration: int) -> int:
     rdeps: DefaultDict[str, Set[str]] = collections.defaultdict(set)
     all_letters: Set[str] = set()
 
@@ -53,6 +54,40 @@ def compute(s: str, *, procs: int, duration: int) -> int:
     return t
 
 
+def compute(s: str, *, procs: int, duration: int) -> int:
+    deps: DefaultDict[str, Set[str]] = collections.defaultdict(set)
+    rdeps: DefaultDict[str, Set[str]] = collections.defaultdict(set)
+    all_letters: Set[str] = set()
+
+    for line in s.splitlines():
+        p_from, p_to = line[5], line[36]
+        rdeps[p_to].add(p_from)
+        deps[p_from].add(p_to)
+        all_letters.update((p_from, p_to))
+
+    i = 0
+    no_deps = sorted([c for c in all_letters if c not in rdeps])
+    workers: List[Tuple[int, str]] = []
+
+    t = 0
+    while i < len(no_deps) or workers:
+        for j, _ in zip(range(i, len(no_deps)), range(procs - len(workers))):
+            c = no_deps[j]
+            i += 1
+            work = (t + duration + ord(c) - ord('A') + 1, c)
+            bisect.insort_left(workers, work)
+
+        t = workers[0][0]
+        while workers and workers[0][0] == t:
+            removed = workers[0][1]
+            del workers[0]
+            for c in deps[removed]:
+                rdeps[c].remove(removed)
+                if not rdeps[c]:
+                    bisect.insort_left(no_deps, c, i)
+    return t
+
+
 @pytest.mark.parametrize(
     ('input_s', 'procs', 'duration', 'expected'),
     (
@@ -83,7 +118,10 @@ def main() -> int:
     parser.add_argument('--duration', default=60, type=int)
     args = parser.parse_args()
 
-    with open(args.data_file) as f, timing():
+    with open(args.data_file) as f, timing('orig'):
+        print(compute_orig(f.read(), procs=args.procs, duration=args.duration))
+
+    with open(args.data_file) as f, timing('topo sort'):
         print(compute(f.read(), procs=args.procs, duration=args.duration))
 
     return 0

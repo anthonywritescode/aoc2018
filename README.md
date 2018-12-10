@@ -83,9 +83,11 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 > 395 μs (orig)
 EUGJKYFQSCLTWXNIZMAPVORDBH
 > 157 μs (topo sort)
-+ python ./day7/part2.py ./day7/input.txt
++ python day7/part2.py day7/input.txt
 1014
-> 488 μs
+> 449 μs (orig)
+1014
+> 234 μs (topo sort)
 + python ./day8/part1.py ./day8/input.txt
 47647
 > 14382 μs (iterative)
