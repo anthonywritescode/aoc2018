@@ -150,7 +150,7 @@ $ python3 day3/part1.py day3/input.txt
 
 ### part 2
 
-- ok so lot's of stuff overlaps
+- ok so lots of stuff overlaps
 - but apparently one claim does not! find it!
 
 ***
