@@ -20,6 +20,9 @@ class Point(NamedTuple):
     def __add__(self, other: 'Point') -> 'Point':  # type: ignore
         return self._replace(x=self.x + other.x, y=self.y + other.y)
 
+    def __mul__(self, t: int) -> 'Point':
+        return self._replace(x=self.x * t, y=self.y * t)
+
 
 class Vector(NamedTuple):
     position: Point
@@ -31,7 +34,10 @@ class Vector(NamedTuple):
         return cls(Point(int(x), int(y)), Point(int(vx), int(vy)))
 
     def update(self) -> 'Vector':
-        return self._replace(position=self.position + self.velocity)
+        return self.at(1)
+
+    def at(self, t: int) -> 'Vector':
+        return self._replace(position=self.position + self.velocity * t)
 
 
 def min_max(vectors: List[Vector]) -> Tuple[int, int, int, int]:
@@ -63,7 +69,7 @@ def area(vectors: List[Vector]) -> int:
     return (max_x - min_x) * (max_y - min_y)
 
 
-def compute(s: str) -> str:
+def compute_orig(s: str) -> str:
     prev_vectors = [Vector.parse(line) for line in s.splitlines()]
     prev_area = area(prev_vectors)
 
@@ -78,8 +84,50 @@ def compute(s: str) -> str:
             prev_area = new_area
 
 
+def vectors_at(vectors: List[Vector], t: int) -> List[Vector]:
+    return [vector.at(t) for vector in vectors]
+
+
+def diff(vectors: List[Vector], t: int) -> int:
+    return area(vectors_at(vectors, t + 1)) - area(vectors_at(vectors, t))
+
+
+def compute(s: str) -> str:
+    vectors = [Vector.parse(line) for line in s.splitlines()]
+    t = 1
+    update = 2
+    power = 1
+
+    while True:
+        if diff(vectors, t + update ** power) > 0:
+            break
+        else:
+            power += 1
+
+    left_bound = t + update ** (power - 1)
+    right_bound = t + update ** power
+
+    while left_bound < right_bound:
+        pivot = left_bound + (right_bound - left_bound) // 2
+        if diff(vectors, pivot) > 0:
+            right_bound = pivot
+        else:
+            left_bound = pivot + 1
+
+    return plot(vectors_at(vectors, left_bound))
+
+
 def test_point_add() -> None:
     assert Point(1, 2) + Point(-3, 4) == Point(-2, 6)
+
+
+def test_point_mult() -> None:
+    assert Point(2, 3) * -4 == Point(-8, -12)
+
+
+def test_vector_update() -> None:
+    v = Vector(Point(1, 2), Point(-3, 4))
+    assert v.update() == Vector(Point(-2, 6), Point(-3, 4))
 
 
 SAMPLE_INPUT = '''\
@@ -143,8 +191,10 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f, timing():
+    with open(args.data_file) as f, timing('binary search'):
         print(compute(f.read()))
+    with open(args.data_file) as f, timing('orig'):
+        print(compute_orig(f.read()))
 
     return 0
 
