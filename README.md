@@ -152,4 +152,10 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 > 337725 ms (brute force)
 142,265,7
 > 9039 ms (summed-area table)
++ python day12/part1.py day12/input.txt
+2166
+> 11588 μs
++ python day12/part2.py day12/input.txt
+2100000000061
+> 72239 μs
 ```
