@@ -142,4 +142,10 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 > 165 ms (binary search)
 10009
 > 21974 ms (orig)
++ python day11/part1.py day11/input.txt
+235,35
+> 590 ms (brute force)
++ pypy3 day11/part2.py day11/input.txt  # too slow for cpython
+142,265,7
+> 2790 ms (brute force)
 ```
