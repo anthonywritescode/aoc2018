@@ -144,7 +144,9 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 > 21974 ms (orig)
 + python day11/part1.py day11/input.txt
 235,35
-> 590 ms (brute force)
+> 413 ms (brute force)
+235,35
+> 216 ms (summed-area table)
 + pypy3 day11/part2.py day11/input.txt  # too slow for cpython
 142,265,7
 > 2790 ms (brute force)
