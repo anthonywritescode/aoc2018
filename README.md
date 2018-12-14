@@ -66,7 +66,9 @@ mxhwoglxgeauywfkztndcvjqr
 > 132 ms
 + python ./day4/part1.py ./day4/input.txt
 60438
-> 3201 μs
+> 3781 μs (orig)
+60438
+> 3430 μs (counter)
 + python ./day4/part2.py ./day4/input.txt
 47989
 > 7153 μs

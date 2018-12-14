@@ -29,7 +29,7 @@ def total_asleep_time(kv: Tuple[int, List[Duration]]) -> int:
     return sum(event.time_asleep for event in kv[1])
 
 
-def compute(s: str) -> int:
+def compute_orig(s: str) -> int:
     guard = start = -1
     by_guard: DefaultDict[int, List[Duration]] = collections.defaultdict(list)
 
@@ -49,6 +49,35 @@ def compute(s: str) -> int:
 
     asleep_times: Counter[int] = collections.Counter()
     for duration in durations:
+        asleep_times.update(range(duration.start, duration.end))
+
+    (sleepiest_minute, _), = asleep_times.most_common(1)
+    return sleepiest * sleepiest_minute
+
+
+def compute(s: str) -> int:
+    guard = start = -1
+    guard_sleep_time: Counter[int] = collections.Counter()
+    durations: DefaultDict[int, List[Duration]] = collections.defaultdict(list)
+
+    for line in sorted(s.splitlines()):
+        begin_shift_match = BEGIN_SHIFT.match(line)
+        event_match = EVENT.match(line)
+        assert event_match, line
+        if begin_shift_match:
+            guard = int(begin_shift_match.group(2))
+        elif start == -1:
+            start = int(event_match.group(1))
+        else:
+            duration = Duration(start, int(event_match.group(1)))
+            guard_sleep_time[guard] += duration.time_asleep
+            durations[guard].append(duration)
+            start = -1
+
+    (sleepiest, _), = guard_sleep_time.most_common(1)
+
+    asleep_times: Counter[int] = collections.Counter()
+    for duration in durations[sleepiest]:
         asleep_times.update(range(duration.start, duration.end))
 
     (sleepiest_minute, _), = asleep_times.most_common(1)
@@ -99,7 +128,9 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f, timing():
+    with open(args.data_file) as f, timing('orig'):
+        print(compute(f.read()))
+    with open(args.data_file) as f, timing('counter'):
         print(compute(f.read()))
 
     return 0
