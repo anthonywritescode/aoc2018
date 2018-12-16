@@ -169,4 +169,7 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 + python day14/part1.py day14/input.txt
 7861362411
 > 835 ms
++ python day14/part2.py day14/input.txt
+20203532
+> 40903 ms
 ```
