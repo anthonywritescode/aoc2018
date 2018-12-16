@@ -3,6 +3,7 @@ repos:
     rev: v2.0.0
     hooks:
     -   id: trailing-whitespace
+        exclude: ^day13/input.txt$
     -   id: end-of-file-fixer
     -   id: check-yaml
     -   id: flake8

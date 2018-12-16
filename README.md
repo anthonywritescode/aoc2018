@@ -160,4 +160,7 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 + python day12/part2.py day12/input.txt
 2100000000061
 > 72239 μs
++ python day13/part1.py day13/input.txt
+74,87
+> 19561 μs
 ```
