@@ -171,7 +171,9 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 > 835 ms
 + python day14/part2.py day14/input.txt
 20203532
-> 40903 ms
+> 40903 ms (orig)
+20203532
+> 25328 ms (only added slices)
 + python day15/part1.py day15/input.txt
 201123
 > 644 ms

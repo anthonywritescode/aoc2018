@@ -5,7 +5,7 @@ import pytest
 from support import timing
 
 
-def compute(s: str) -> int:
+def compute_orig(s: str) -> int:
     sequence = [int(c) for c in s.strip()]
 
     recipes = [3, 7]
@@ -30,6 +30,28 @@ def compute(s: str) -> int:
             min_search = i
 
 
+def compute(s: str) -> int:
+    seq = [int(c) for c in s.strip()]
+
+    recipes = [3, 7]
+    e1_i = 0
+    e2_i = 1
+
+    while True:
+        recipe_sum = recipes[e1_i] + recipes[e2_i]
+        if recipe_sum >= 10:
+            recipes.append(recipe_sum // 10)
+        recipes.append(recipe_sum % 10)
+
+        e1_i = (e1_i + 1 + recipes[e1_i]) % len(recipes)
+        e2_i = (e2_i + 1 + recipes[e2_i]) % len(recipes)
+
+        if recipes[-1 * len(seq):] == seq:
+            return len(recipes) - len(seq)
+        elif recipe_sum >= 10 and recipes[-1 * len(seq) - 1:-1] == seq:
+            return len(recipes) - len(seq) - 1
+
+
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
@@ -48,7 +70,10 @@ def main() -> int:
     parser.add_argument('data_file')
     args = parser.parse_args()
 
-    with open(args.data_file) as f, timing():
+    with open(args.data_file) as f, timing('orig'):
+        print(compute_orig(f.read()))
+
+    with open(args.data_file) as f, timing('only added slices'):
         print(compute(f.read()))
 
     return 0
