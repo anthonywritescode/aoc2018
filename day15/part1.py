@@ -34,10 +34,6 @@ def print_field(
         )
 
 
-class CombatEnds(Exception):
-    pass
-
-
 def adjacent(y: int, x: int) -> Generator[Tuple[int, int], None, None]:
     # in reading order
     yield (y - 1, x)
@@ -58,83 +54,78 @@ def compute(s: str) -> int:
                 hps[(unit.y, unit.x)] = 200
 
     i = 0
-    try:
-        while True:
-            for unit in tuple(units):
-                if unit not in units:  # unit was killed earlier
+    while True:
+        for unit in tuple(units):
+            if unit not in units:  # unit was killed earlier
+                continue
+
+            targets = [x for x in units if x.unit_type != unit.unit_type]
+            if not targets:
+                return i * sum(hps.values())
+
+            in_range: Set[Tuple[int, int]] = set()
+            for target in targets:
+                for y, x in adjacent(target.y, target.x):
+                    if field[y][x] == '.' or (y, x) == (unit.y, unit.x):
+                        in_range.add((y, x))
+
+            # path to a target
+            if (unit.y, unit.x) not in in_range:
+                seen = {(unit.y, unit.x): (-1, -1)}
+                last = [(unit.y, unit.x)]
+                while last:
+                    new_last = []
+                    for last_y, last_x in last:
+                        for cand_y, cand_x in adjacent(last_y, last_x):
+                            if (
+                                    (cand_y, cand_x) not in seen and
+                                    field[cand_y][cand_x] == '.'
+                            ):
+                                new_last.append((cand_y, cand_x))
+                                seen[(cand_y, cand_x)] = (last_y, last_x)
+
+                    if seen.keys() & in_range:
+                        break
+
+                    last = new_last
+                else:  # never pathed to an in_range square
                     continue
 
-                targets = [x for x in units if x.unit_type != unit.unit_type]
-                if not targets:
-                    raise CombatEnds()
+                chosen_y, chosen_x = min(seen.keys() & in_range)
+                while seen[(chosen_y, chosen_x)] != (unit.y, unit.x):
+                    chosen_y, chosen_x = seen[(chosen_y, chosen_x)]
 
-                in_range: Set[Tuple[int, int]] = set()
-                for target in targets:
-                    for y, x in adjacent(target.y, target.x):
-                        if field[y][x] == '.' or (y, x) == (unit.y, unit.x):
-                            in_range.add((y, x))
+                hp = hps.pop((unit.y, unit.x))
+                field[unit.y][unit.x] = '.'
+                units.remove(unit)
 
-                # path to a target
-                if (unit.y, unit.x) not in in_range:
-                    seen = {(unit.y, unit.x): (-1, -1)}
-                    last = [(unit.y, unit.x)]
-                    while last:
-                        new_last = []
-                        for last_y, last_x in last:
-                            for cand_y, cand_x in adjacent(last_y, last_x):
-                                if (
-                                        (cand_y, cand_x) not in seen and
-                                        field[cand_y][cand_x] == '.'
-                                ):
-                                    new_last.append((cand_y, cand_x))
-                                    seen[(cand_y, cand_x)] = (last_y, last_x)
+                unit = unit._replace(y=chosen_y, x=chosen_x)
 
-                        if seen.keys() & in_range:
-                            break
+                hps[(unit.y, unit.x)] = hp
+                field[unit.y][unit.x] = unit.unit_type
+                bisect.insort_left(units, unit)
 
-                        last = new_last
-                    else:  # never pathed to an in_range square
-                        continue
+            # if in range: attack!
+            if (unit.y, unit.x) in in_range:
+                target_coords = {(t.y, t.x): t for t in targets}
 
-                    chosen_y, chosen_x = min(seen.keys() & in_range)
-                    while seen[(chosen_y, chosen_x)] != (unit.y, unit.x):
-                        chosen_y, chosen_x = seen[(chosen_y, chosen_x)]
+                candidates = [
+                    (hps[(y, x)], y, x)
+                    for y, x in adjacent(unit.y, unit.x)
+                    if (y, x) in target_coords
+                ]
+                _, target_y, target_x = min(candidates)
 
-                    hp = hps.pop((unit.y, unit.x))
-                    field[unit.y][unit.x] = '.'
-                    units.remove(unit)
+                target_unit = target_coords[(target_y, target_x)]
+                hps[(target_y, target_x)] -= 3
+                if hps[(target_y, target_x)] <= 0:
+                    units.remove(target_unit)
+                    del hps[(target_y, target_x)]
+                    field[target_y][target_x] = '.'
 
-                    unit = unit._replace(y=chosen_y, x=chosen_x)
-
-                    hps[(unit.y, unit.x)] = hp
-                    field[unit.y][unit.x] = unit.unit_type
-                    bisect.insort_left(units, unit)
-
-                # if in range: attack!
-                if (unit.y, unit.x) in in_range:
-                    target_coords = {(t.y, t.x): t for t in targets}
-
-                    candidates = [
-                        (hps[(y, x)], y, x)
-                        for y, x in adjacent(unit.y, unit.x)
-                        if (y, x) in target_coords
-                    ]
-                    _, target_y, target_x = min(candidates)
-
-                    target_unit = target_coords[(target_y, target_x)]
-                    hps[(target_y, target_x)] -= 3
-                    if hps[(target_y, target_x)] <= 0:
-                        units.remove(target_unit)
-                        del hps[(target_y, target_x)]
-                        field[target_y][target_x] = '.'
-
-            i += 1
-            # print(f'@{i}')
-            # print_field(field, hps, units)
-    except CombatEnds:
-        pass
-
-    return i * sum(hps.values())
+        i += 1
+        # print(f'@{i}')
+        # print_field(field, hps, units)
 
 
 SAMPLE1 = '''\
