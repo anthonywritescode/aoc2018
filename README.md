@@ -186,4 +186,7 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 + python day16/part2.py day16/input.txt
 525
 > 11908 μs
++ python day17/part1.py day17/input.txt
+39367
+> 1310 ms
 ```
