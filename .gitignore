@@ -1,6 +1,7 @@
-*.pyc
 *.egg-info
+*.pyc
 */.mtp
+*/a.out
 */assets
 */build
 */index.htm
