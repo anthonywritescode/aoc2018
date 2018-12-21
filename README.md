@@ -213,4 +213,8 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 + python day21/part1.py day21/input.txt
 7216956
 > 2212 μs
+# before optimizing, day21: > 3134163 ms (52 minutes)
++ python day21/part2.py day21/input.txt
+14596916
+> 19394 μs
 ```
