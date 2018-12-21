@@ -31,7 +31,7 @@ class opcodes:
 
     @staticmethod
     def bani(regs: Sequence[int], a: int, b: int) -> int:
-        return regs[a] | b
+        return regs[a] & b
 
     @staticmethod
     def borr(regs: Sequence[int], a: int, b: int) -> int:
@@ -39,7 +39,7 @@ class opcodes:
 
     @staticmethod
     def bori(regs: Sequence[int], a: int, b: int) -> int:
-        return regs[a] & b
+        return regs[a] | b
 
     @staticmethod
     def setr(regs: Sequence[int], a: int, b: int) -> int:
