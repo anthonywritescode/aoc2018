@@ -105,6 +105,75 @@ def reindent(src: str, lines: List[str]) -> List[str]:
     return [replace_re.sub(indent, line) for line in lines]
 
 
+def inline_movable_blocks(code: List[str]) -> List[str]:
+    blocks = code_to_blocks(code)
+    for i, block in enumerate(blocks):
+        if block.movable:
+            break
+    else:  # no movable blocks found
+        return code
+
+    victim = blocks[i]
+    del blocks[i]
+
+    for block in blocks:
+        newcode = []
+        for line in block.code:
+            goto = GOTO_RE.search(line)
+            if goto and goto.group(1) == f'instr{victim.label}':
+                newcode.extend(reindent(line, victim.code[1:]))
+            else:
+                newcode.append(line)
+        block.code[:] = newcode
+
+    return sum((block.code for block in blocks), [])
+
+
+def transform_loops(code: List[str]) -> List[str]:
+    # roughly this algorithm:
+    # - search forward for a label
+    #   - search forward for a `goto` back to that label
+    #       - if another goto is hit, abandon
+    #   - goto is hit, replace the goto with `continue` and the label with
+    #     while (1) {, indent the braced contents up to that point, replace
+    #     the next else block with `break`
+    for i, line in enumerate(code):
+        label_match = LABEL_RE.search(line)
+        if label_match:
+            matching = -1
+            for j, search_line in enumerate(code[i:], i):
+                goto = GOTO_RE.search(search_line)
+                if goto and goto.group(1) == f'instr{label_match.group(1)}':
+                    matching = j  # found our loop goto
+                    break
+                elif goto:  # found a goto, but it was not our loop
+                    break
+
+            if matching >= 0:
+                break
+    else:  # no loopable code found
+        return code
+
+    assert code[matching + 1].strip() == '} else {', code[matching + 1]
+    assert code[matching + 3].strip() == '}', code[matching + 3]
+
+    cond_indent_match = INDENT_RE.match(code[matching])
+    assert cond_indent_match, code[matching]
+    cond_indent = cond_indent_match.group()
+
+    newcode = code[:]
+    newcode[i] = '    while (1) {'
+    newcode[matching] = f'{cond_indent}continue'
+    newcode.insert(matching + 3, f'{cond_indent}break')
+    newcode.insert(matching + 5, '    }')
+
+    for i in range(i + 1, matching + 5):
+        if INDENT_RE.match(newcode[i]):
+            newcode[i] = '    ' + newcode[i]
+
+    return newcode
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument('filename')
@@ -192,29 +261,17 @@ def main() -> int:
         if not line.endswith(':') or line in used_gotos
     ]
 
-    # inline movable blocks
-    while True:
-        blocks = code_to_blocks(code)
-        for i, block in enumerate(blocks):
-            if block.movable:
-                break
-        else:  # no movable blocks found
-            break
+    modified = True
+    while modified:
+        modified = False
 
-        victim = blocks[i]
-        del blocks[i]
+        new_code = inline_movable_blocks(code)
+        modified |= new_code != code
+        code = new_code
 
-        for block in blocks:
-            newcode = []
-            for line in block.code:
-                goto = GOTO_RE.search(line)
-                if goto and goto.group(1) == f'instr{victim.label}':
-                    newcode.extend(reindent(line, victim.code[1:]))
-                else:
-                    newcode.append(line)
-            block.code[:] = newcode
-
-        code = sum((block.code for block in blocks), [])
+        new_code = transform_loops(code)
+        modified |= new_code != code
+        code = new_code
 
     print('#include <assert.h>')
     print('#include <stdio.h>')
