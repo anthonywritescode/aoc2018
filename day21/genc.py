@@ -16,39 +16,11 @@ tmpl = {
     'bori': '    reg{vc} = reg{va} | {vb};',
 }
 
-j_tmpl = {
-    'eqrr': (
-        '    if (reg{va} != reg{vb}) {{\n'
-        '        reg{vc} = 0;\n'
-        '        goto instr{j};\n'
-        '    }} else {{\n'
-        '        reg{vc} = 1;\n'
-        '    }}'
-    ),
-    'eqri': (
-        '    if (reg{va} != {vb}) {{\n'
-        '        reg{vc} = 0;\n'
-        '        goto instr{j};\n'
-        '    }} else {{\n'
-        '        reg{vc} = 1;\n'
-        '    }}'
-    ),
-    'gtir': (
-        '    if ({va} <= reg{vb}) {{\n'
-        '        reg{vc} = 0;\n'
-        '        goto instr{j};\n'
-        '    }} else {{\n'
-        '        reg{vc} = 1;\n'
-        '    }}'
-    ),
-    'gtrr': (
-        '    if (reg{va} <= reg{vb}) {{\n'
-        '        reg{vc} = 0;\n'
-        '        goto instr{j};\n'
-        '    }} else {{\n'
-        '        reg{vc} = 1;\n'
-        '    }}'
-    ),
+cond = {
+    'eqrr': 'reg{va} != reg{vb}',
+    'eqri': 'reg{va} != {vb}',
+    'gtir': '{va} <= reg{vb}',
+    'gtrr': 'reg{va} <= reg{vb}',
 }
 
 HALT = (
@@ -77,18 +49,6 @@ def main() -> int:
         lines = list(f)
 
     code = []
-
-    code.append('#include <assert.h>')
-    code.append('#include <stdio.h>')
-    code.append('')
-    code.append('int main() {')
-
-    regvars = [f'reg{i}' for i in range(6) if i != reg]
-    code.append(f'    unsigned long long {", ".join(regvars)};')
-    code.append(f'    {" = ".join(regvars)} = 0;')
-    if args.reg0_initial:
-        code.append(f'    reg0 = {args.reg0_initial};')
-
     currlabel = 0
 
     line_iter = iter(lines)
@@ -129,22 +89,26 @@ def main() -> int:
                 assert {addr_va, addr_vb} == {reg, vc}, (addr, line)
                 assert jump_vc == reg, (jump, reg)
                 if jump_instr == 'seti':
-                    j = jump_va + 1
+                    dest = jump_va + 1
                 elif jump_instr == 'addi':
                     assert jump_va == reg, (jump, reg)
-                    j = currlabel + 2 + jump_vb + 1
+                    dest = currlabel + 2 + jump_vb + 1
                 else:
                     assert False, jump
-                code.append(j_tmpl[instr].format(va=va, vb=vb, vc=vc, j=j))
+                code.append(
+                    f'    if ({cond[instr].format(va=va, vb=vb)}) {{\n'
+                    f'        reg{vc} = 0;\n'
+                    f'        goto instr{dest};\n'
+                    f'    }} else {{\n'
+                    f'        reg{vc} = 1;\n'
+                    f'    }}'
+                )
                 currlabel += 2
             else:
                 res = tmpl[instr].format(va=va, vb=vb, vc=vc)
                 res = res.replace(f'reg{reg}', str(currlabel))
                 code.append(res)
         currlabel += 1
-
-    code.append(HALT)
-    code.append('}')
 
     used_gotos = set()
     for line in code:
@@ -157,7 +121,21 @@ def main() -> int:
         if not line.endswith(':') or line in used_gotos
     ]
 
+    print('#include <assert.h>')
+    print('#include <stdio.h>')
+    print('')
+    print('int main() {')
+
+    regvars = [f'reg{i}' for i in range(6) if i != reg]
+    print(f'    unsigned long long {", ".join(regvars)};')
+    print(f'    {" = ".join(regvars)} = 0;')
+    if args.reg0_initial:
+        print(f'    reg0 = {args.reg0_initial};')
+
     print('\n'.join(code))
+
+    print(HALT)
+    print('}')
 
     return 0
 
