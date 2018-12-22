@@ -1,8 +1,36 @@
 import argparse
 import re
+import sys
+from typing import List
+from typing import NamedTuple
 from typing import Tuple
 
 GOTO_RE = re.compile(r'goto (instr\d+);')
+LABEL_RE = re.compile(r'(\d+):$')
+INDENT_RE = re.compile(r'^(    )+')
+
+
+class Block(NamedTuple):
+    label: int
+    movable_before: bool
+    code: List[str]
+
+    @property
+    def self_referential(self) -> bool:
+        for line in self.code:
+            goto = GOTO_RE.search(line)
+            if goto and goto.group(1) == f'instr{self.label}':
+                return True
+        else:
+            return False
+
+    @property
+    def movable(self) -> bool:
+        return (
+            self.movable_before and
+            not self.self_referential and
+            movable_border(self.code[-1])
+        )
 
 
 tmpl = {
@@ -33,6 +61,48 @@ def parse_instr(s: str) -> Tuple[str, int, int, int]:
     instr, *rest = s.split()
     va, vb, vc = [int(c) for c in rest]
     return instr, va, vb, vc
+
+
+def movable_border(s: str) -> bool:
+    return bool(GOTO_RE.search(s)) or s.endswith('return 0;\n')
+
+
+def code_to_blocks(code: List[str]) -> List[Block]:
+    ret: List[Block] = []
+    movable_before = False
+    label = -1
+    chunk: List[str] = []
+    prev_line = ''
+
+    for line in code:
+        label_match = LABEL_RE.search(line)
+        if label_match:
+            ret.append(Block(label, movable_before, chunk))
+            movable_before = movable_border(prev_line)
+            label = int(label_match.group(1))
+            chunk = []
+
+        chunk.append(line)
+        prev_line = line
+
+    ret.append(Block(label, movable_before, chunk))
+
+    return ret
+
+
+def reindent(src: str, lines: List[str]) -> List[str]:
+    indent_match = INDENT_RE.match(src)
+    assert indent_match, src
+    indent = indent_match.group()
+
+    min_indent = sys.maxsize
+    for line in lines:
+        indent_match = INDENT_RE.match(line)
+        if indent_match and len(indent_match.group()) < min_indent:
+            min_indent = len(indent_match.group())
+
+    replace_re = re.compile(f'^{" " * min_indent}')
+    return [replace_re.sub(indent, line) for line in lines]
 
 
 def main() -> int:
@@ -95,14 +165,13 @@ def main() -> int:
                     dest = currlabel + 2 + jump_vb + 1
                 else:
                     assert False, jump
-                code.append(
-                    f'    if ({cond[instr].format(va=va, vb=vb)}) {{\n'
-                    f'        reg{vc} = 0;\n'
-                    f'        goto instr{dest};\n'
-                    f'    }} else {{\n'
-                    f'        reg{vc} = 1;\n'
-                    f'    }}'
-                )
+                condition = cond[instr].format(va=va, vb=vb)
+                code.append(f'    if ({condition}) {{')
+                code.append(f'        reg{vc} = 0;')
+                code.append(f'        goto instr{dest};')
+                code.append(f'    }} else {{')
+                code.append(f'        reg{vc} = 1;')
+                code.append(f'    }}')
                 currlabel += 2
             else:
                 res = tmpl[instr].format(va=va, vb=vb, vc=vc)
@@ -110,16 +179,42 @@ def main() -> int:
                 code.append(res)
         currlabel += 1
 
+    code.append(HALT)
+
+    # remove unused labels
     used_gotos = set()
     for line in code:
         match = GOTO_RE.search(line)
         if match:
             used_gotos.add(match.group(1) + ':')
-
     code = [
         line for line in code
         if not line.endswith(':') or line in used_gotos
     ]
+
+    # inline movable blocks
+    while True:
+        blocks = code_to_blocks(code)
+        for i, block in enumerate(blocks):
+            if block.movable:
+                break
+        else:  # no movable blocks found
+            break
+
+        victim = blocks[i]
+        del blocks[i]
+
+        for block in blocks:
+            newcode = []
+            for line in block.code:
+                goto = GOTO_RE.search(line)
+                if goto and goto.group(1) == f'instr{victim.label}':
+                    newcode.extend(reindent(line, victim.code[1:]))
+                else:
+                    newcode.append(line)
+            block.code[:] = newcode
+
+        code = sum((block.code for block in blocks), [])
 
     print('#include <assert.h>')
     print('#include <stdio.h>')
@@ -134,7 +229,7 @@ def main() -> int:
 
     print('\n'.join(code))
 
-    print(HALT)
+    print('    assert(0);')
     print('}')
 
     return 0
