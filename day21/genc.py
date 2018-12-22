@@ -219,7 +219,7 @@ def main() -> int:
             else:
                 assert False, line
         else:
-            if instr in ('eqri', 'eqrr', 'gtir', 'gtrr'):
+            if instr in cond:
                 addr = next(line_iter).strip()
                 addr_intsr, addr_va, addr_vb, addr_vc = parse_instr(addr)
                 jump = next(line_iter).strip()
