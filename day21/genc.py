@@ -163,8 +163,8 @@ def transform_loops(code: List[str]) -> List[str]:
 
     newcode = code[:]
     newcode[i] = '    while (1) {'
-    newcode[matching] = f'{cond_indent}continue'
-    newcode.insert(matching + 3, f'{cond_indent}break')
+    newcode[matching] = f'{cond_indent}continue;'
+    newcode.insert(matching + 3, f'{cond_indent}break;')
     newcode.insert(matching + 5, '    }')
 
     for i in range(i + 1, matching + 5):
