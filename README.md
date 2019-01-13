@@ -229,4 +229,7 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 + python day24/part1.py day24/input.txt
 21070
 > 70280 μs
++ python day24/part2.py day24/input.txt
+7500
+> 9351 ms
 ```
