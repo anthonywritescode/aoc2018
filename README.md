@@ -226,6 +226,9 @@ EUGJKYFQSCLTWXNIZMAPVORDBH
 + python day23/part1.py day23/input.txt
 737
 > 6942 μs
++ python day23/part2.py day23/input.txt
+123356173
+> 70834 ms
 + python day24/part1.py day24/input.txt
 21070
 > 70280 μs
