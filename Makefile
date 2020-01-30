@@ -7,7 +7,7 @@ venv: requirements.txt
 	rm -rf venv
 	virtualenv venv -ppython3
 	venv/bin/pip install -rrequirements.txt
-	venv/bin/pre-commit install -f --install-hooks
+	venv/bin/pre-commit install
 
 index.htm: README.md venv
 	venv/bin/markdown-code-blocks-highlight $< > $@
