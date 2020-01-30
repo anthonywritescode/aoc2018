@@ -88,7 +88,7 @@
 </section><section><h3>part 1 - running</h3>
 <div class="highlight pytest"><pre><span></span>$ pytest -q day1/part1.py
 <span class=" -Color -Color-Green">....</span>                                                                 <span class=" -Color -Color-Cyan">[100%]</span>
-<span class=" -Color -Color-BoldGreen">4 passed in 0.01 seconds</span>
+<span class=" -Color -Color-Bold -Color-Bold-Green">4 passed in 0.01 seconds</span>
 </pre></div>
 <div class="highlight console"><pre><span></span><span class="gp">$</span> python day1/part1.py day1/input.txt
 <span class="go">587</span>
@@ -99,7 +99,7 @@
     <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
 </pre></div>
 <p>code golf</p>
-<div class="highlight python"><pre><span></span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span><span class="nb">eval</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;({s})&#39;</span><span class="p">)</span>
+<div class="highlight python"><pre><span></span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span><span class="nb">eval</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{s}</span><span class="s1">)&#39;</span><span class="p">)</span>
 </pre></div>
 </section><section><h3>part 2</h3>
 <ul>
@@ -142,7 +142,7 @@
 </pre></div>
 </section><section><h3>part 2 - code</h3>
 <p>parse line by line repeatedly</p>
-<div class="highlight python"><pre><span></span><span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<div class="highlight python"><pre><span></span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
         <span class="o">...</span>
 </pre></div>
@@ -192,7 +192,7 @@
 </section><section><h3>part 2 - running</h3>
 <div class="highlight pytest"><pre><span></span>$ pytest -q day1/part2.py
 <span class=" -Color -Color-Green">.....</span>                                                                <span class=" -Color -Color-Cyan">[100%]</span>
-<span class=" -Color -Color-BoldGreen">5 passed in 0.01 seconds</span>
+<span class=" -Color -Color-Bold -Color-Bold-Green">5 passed in 0.01 seconds</span>
 </pre></div>
 <div class="highlight console"><pre><span></span><span class="gp">$</span> python day1/part2.py day1/input.txt
 <span class="go">83130</span>

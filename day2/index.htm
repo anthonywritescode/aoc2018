@@ -121,7 +121,7 @@ c f
 <p>O(N^2) time | O(N) space</p>
 </section><section><h3>part 2 - alternate comparison</h3>
 <p><code>difflib</code> - compare text!</p>
-<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">difflib</span><span class="o">.</span><span class="n">ndiff</span><span class="p">((</span><span class="s1">&#39;aaaaabaaaa</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,),</span> <span class="p">(</span><span class="s1">&#39;aaaaacaaaa</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,))))</span>
+<div class="highlight pycon"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">difflib</span><span class="o">.</span><span class="n">ndiff</span><span class="p">((</span><span class="s1">&#39;aaaaabaaaa</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,),</span> <span class="p">(</span><span class="s1">&#39;aaaaacaaaa</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,))))</span>
 <span class="go">- aaaaabaaaa</span>
 <span class="go">?      ^</span>
 <span class="go">+ aaaaacaaaa</span>
