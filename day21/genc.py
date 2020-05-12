@@ -238,9 +238,9 @@ def main() -> int:
                 code.append(f'    if ({condition}) {{')
                 code.append(f'        reg{vc} = 0;')
                 code.append(f'        goto instr{dest};')
-                code.append(f'    }} else {{')
+                code.append('    } else {')
                 code.append(f'        reg{vc} = 1;')
-                code.append(f'    }}')
+                code.append('    }')
                 currlabel += 2
             else:
                 res = tmpl[instr].format(va=va, vb=vb, vc=vc)
