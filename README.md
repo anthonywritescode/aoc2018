@@ -1,3 +1,5 @@
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/anthonywritescode/aoc2018/master.svg)](https://results.pre-commit.ci/latest/github/anthonywritescode/aoc2018/master)
+
 advent of code 2018
 ===================
 
