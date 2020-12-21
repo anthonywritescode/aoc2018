@@ -1,5 +1,5 @@
 -e support
-markdown-to-presentation==0.0.29
+markdown-to-presentation
 pygments-pytest
 pre-commit
 pytest
