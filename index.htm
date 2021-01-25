@@ -34,7 +34,7 @@
 <li>alternate implementations are listed in parens</li>
 <li>these timings are very non-scientific (sample size 1)</li>
 </ul>
-<div class="highlight console"><pre><span></span><span class="gp">$</span> find -maxdepth <span class="m">1</span> -type d -name <span class="s1">&#39;day*&#39;</span> -not -name day0 <span class="p">|</span> sort <span class="p">|</span> xargs --replace bash -xc <span class="s1">&#39;python {}/part1.py {}/input.txt; python {}/part2.py {}/input.txt&#39;</span>
+<div class="highlight console"><pre><span></span><span class="gp">$ </span>find -maxdepth <span class="m">1</span> -type d -name <span class="s1">&#39;day*&#39;</span> -not -name day0 <span class="p">|</span> sort <span class="p">|</span> xargs --replace bash -xc <span class="s1">&#39;python {}/part1.py {}/input.txt; python {}/part2.py {}/input.txt&#39;</span>
 <span class="go">+ python ./day1/part1.py ./day1/input.txt</span>
 <span class="go">587</span>
 <span class="gp">&gt;</span> <span class="m">463</span> μs <span class="o">(</span>oneline<span class="o">)</span>
@@ -218,7 +218,7 @@
 <span class="go">+ python day21/part1.py day21/input.txt</span>
 <span class="go">7216956</span>
 <span class="gp">&gt;</span> <span class="m">2212</span> μs
-<span class="gp">#</span> before optimizing, day21: &gt; <span class="m">3134163</span> ms <span class="o">(</span><span class="m">52</span> minutes<span class="o">)</span>
+<span class="gp"># </span>before optimizing, day21: &gt; <span class="m">3134163</span> ms <span class="o">(</span><span class="m">52</span> minutes<span class="o">)</span>
 <span class="go">+ python day21/part2.py day21/input.txt</span>
 <span class="go">14596916</span>
 <span class="gp">&gt;</span> <span class="m">19394</span> μs
