@@ -6,7 +6,7 @@ repos:
         exclude: ^day13/input.txt$
     -   id: end-of-file-fixer
     -   id: check-yaml
--   repo: https://gitlab.com/pycqa/flake8
+-   repo: https://github.com/PyCQA/flake8
     rev: 3.9.0
     hooks:
     -   id: flake8
